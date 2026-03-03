@@ -1,0 +1,444 @@
+% !TeX program = pdflatex
+% Phase 1 migration: structure + WPF text transcribed into LaTeX.
+% NOTE: This document intentionally preserves WPF wording for now.
+% Next phases will rewrite sections to Avalonia + Rider.
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{titlesec}
+
+\geometry{margin=2.2cm}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  urlcolor=blue!50!black
+}
+
+\title{Interakcija čovek -- računar\\Vežbe 3}
+\author{Fakultet tehničkih nauka\\Univerzitet u Novom Sadu}
+\date{}
+
+\newcommand{\MigrationNote}[1]{%
+  \begin{quote}
+    \color{black!75}\textbf{Migration note (Phase 1):} #1
+  \end{quote}
+}
+
+\newcommand{\FigurePlaceholder}[2]{%
+  \begin{figure}[h]
+    \centering
+    \fbox{\parbox{0.92\linewidth}{\vspace{18mm}\centering\textit{Placeholder for figure file}\\\texttt{assets/#1}\\\vspace{18mm}}}
+    \caption{#2}
+  \end{figure}
+}
+
+\begin{document}
+\maketitle
+
+\section*{Migration Checklist (Phase 1)}
+\MigrationNote{This is an extraction of the existing WPF PDF into LaTeX. Content is preserved; wording is not yet adapted to Avalonia + Rider. Figures are placeholders (original screenshots are not imported yet).}
+
+\begin{itemize}[leftmargin=*,nosep]
+  \item \textbf{Keep (concepts):} markup vs code-behind, events, layout panels, data binding, resources, converters.
+  \item \textbf{Rewrite (tooling):} project creation steps, IDE workflow, designer/toolbox references, screenshots.
+  \item \textbf{Replace (APIs/examples):} WPF-specific namespaces/types, MessageBox examples, WPF-specific validation/adorners, WPF documentation links.
+  \item \textbf{Re-shoot:} all Visual Studio screenshots (Rider cross-platform).
+\end{itemize}
+
+\tableofcontents
+\newpage
+
+\section{Uvod u WPF}
+\MigrationNote{Rewrite section as \emph{Uvod u Avalonia}. Keep GUI/XAML framing, replace WPF-specific statements with Avalonia equivalents and cross-platform positioning.}
+
+Windows Presentation Foundation (WPF) je GUI (Graphical User Interface) framework za kreiranje Windows desktop aplikacija.
+
+GUI framework omogućava da kreiramo aplikacije uz pomoć velikog opsega GUI elemenata kao što su labele (eng. labels), polja za unos teksta (eng. textboxes). Bez GUI framework-a, morali bi da crtamo ove elemente ručno i da upravljamo sa svim korisničkim interakcijama, kao što je unos teksta ili pomeranje miša.
+
+WPF sadrži set application-development alata (eng. features): Application Markup Language (XAML), kontrole, Data binding, layouts, 2D i 3D grafika, animacije, stilovi, media i slično.
+
+\subsection{Kreiranje WPF projekta}
+\MigrationNote{Replace with Rider + \texttt{dotnet new} Avalonia templates instructions. Replace all screenshots.}
+
+Jedan od načina kreiranja novog WPF projekta je odabirom File/New/Project.
+
+\FigurePlaceholder{slika-1.png}{Slika 1. Kreiranje novog projekta}
+
+Potrebno je odabrati WPF App (.NET Framework) i popuniti Name i Location polja.
+
+\FigurePlaceholder{slika-2.png}{Slika 2. Odabir WPF projekta}
+
+\subsection{Markup i code-behind}
+\MigrationNote{Keep concept, update IDE navigation screenshots and Avalonia project file names.}
+
+WPF omogućava da se razvija aplikacija koristeći markup i code-behind.
+
+XAML markup se obično koristi za implementaciju izgleda aplikacije dok se code behind koristi za implementaciju ponašanja tih komponenti.
+
+Ovo razdvajanje na izgled i ponašanje povlači neke od prednosti kao što su:
+
+\begin{enumerate}[leftmargin=*]
+  \item Cena razvoja i održavanja aplikacije je smanjena jer je znatno lakše upravljati sa aplikacijom kod koje izgled i ponašanje nisu usko vezani (eng. tightly coupled).
+  \item Razvoj aplikacije je ubrzan i efikasan jer dizajneri mogu implementirati izgled aplikacije nezavisno i paralelno od programera koji implementiraju ponašanje aplikacije.
+  \item Globalizacija i lokalizacija za WPF aplikacije je pojednostavljena.
+\end{enumerate}
+
+Na slici se može videti otvoren prazan WPF projekat i brojevi kojima su označeni najbitniji segmenti za razvoj WPF aplikacije.
+
+Sa (1) označen je Toolbox u kom se nalaze sve WPF kontrole koje se mogu iskoristiti za kreiranje grafičkog korisničkog interfejsa. Sa brojem 2 označen je dizajner u kom se može pratiti izgled aplikacije u toku njenog kreiranja.
+
+Dodavanjem komponente iz Toolbox-a na prozor može se vršiti prevlačenjem (drag\&drop).
+
+Sa (3) označen je XAML kod (markup). Kada se kontrola prevuče na prozor (sekcija 2), u XAML kodu (sekcija 3) pojaviće se odgovarajući tag. Takođe, dodavanjem taga u XAML kod (sekcija 3), promene će se manifestovati u prozoru (sekcija 2).
+
+Sekcija 4 predstavlja Solution Explorer gde se može vršiti pregled fajlova u projektu.
+
+Na slici možemo primetiti da je otvoren MainWindow.xaml fajl što zapravo predstavlja XAML kod ovog projekta.
+
+\FigurePlaceholder{slika-3.png}{Slika 3. Okruženje i XAML kod}
+
+Ako se u Solution Exploreru (sekcija 4) otvori MainWindow.xaml.cs dobija se code behind.
+
+\FigurePlaceholder{slika-4.png}{Slika 4. Code behind}
+
+Osim odabirom iz Solution Explorera, jednostavan način da se iz XAML koda pređe na .cs fajl je desni klik i odabir View Code opcije iz padajućeg menija.
+
+\FigurePlaceholder{slika-5.png}{Slika 5. Prelazak sa XAML koda na Code behind}
+
+Prelazak iz .cs fajla na dizajner (XAML) moguć je pomoću desni klik pa na View Designer opciju.
+
+\FigurePlaceholder{slika-6.png}{Slika 6. Prelazak sa Code behind na XAML kod}
+
+\section{Markup (XAML)}
+\MigrationNote{Keep most content; update XAML namespaces to Avalonia and use Avalonia examples.}
+
+XAML je XML-bazirani markup jezik koji omogućava implementiranje izgleda aplikacije (eng. application's appearance). Koristi se za kreiranje prozora, jednostavnih dijaloga i kontrola a navedeno dalje možemo popunjavati sa novim kontrolama, oblicima i grafičkim elementima.
+
+Primer prikazuje XAML kod jednostavnog prozora (tag \texttt{<Window>}) koji sadrži samo jedno dugme (tag \texttt{<Button>}).
+
+\FigurePlaceholder{slika-7.png}{Slika 7. Jednostavan prozor sa jednim dugmetom}
+
+Svaki element može da sadrži određene atribute, slično kao u XML-u. U primeru se vidi da tag \texttt{<Window>} sadrži Title atribut koji je zapravo title-bar tekst.
+
+U primeru je prikazano kako se uz pomoć FontWeight property može postaviti boldovan tekst sa sadržajem “A button”.
+
+\FigurePlaceholder{slika-8.png}{Slika 8. Atributi dugmeta - inline}
+
+Još jedan način definisanja atributa je prikazan. Ovaj način prikazuje atribute kao child tagove glavnog taga, a u ovom slučaju to je \texttt{<Button>}.
+
+\FigurePlaceholder{slika-9.png}{Slika 9. Atributi dugmeta - child komponente}
+
+S obzirom da je XAML XML-bazirani jezik, UI koji se kreira predstavlja hijerarhiju ugnježdenih elementa poznatih pod nazivom element tree.
+
+Dat je primer gde je u okviru jednog dugmeta kreirano više tekst blokova koristeći više \texttt{<TextBlock>} tagova u \texttt{<Button>} tagu.
+
+Tekst u tekst blokovima je obojen različitim bojama koristeći atribut Foreground.
+
+\FigurePlaceholder{slika-10.png}{Slika 10. Složeni oblik dugmeta - prvi način}
+
+Content property dozvoljava samo jedan child element pa je bilo potrebno obuhvatiti child komeponente u WrapPanel. Paneli, kao što je WrapPanel, igraju veoma važnu ulogu u WPF i predstavljaju kontejnere za druge kontrole.
+
+Isti rezultat se može postići na sledeći način. Ovaj način je jednostavniji i češće je u upotrebi.
+
+\FigurePlaceholder{slika-11.png}{Slika 11. Složeni oblik dugmeta - drugi način}
+
+\section{Code-behind}
+\MigrationNote{Keep concept; update namespaces and examples to Avalonia (no \texttt{System.Windows.MessageBox}).}
+
+Osnovna odlika svake aplikacije je da implementira funkcionalnosti, uključujući obradu događaja (eng. handling events) kao što je korisnički klik. U WPF-u, ponašanje nakon okidanja dođaja se implementira u kodu koji je povezan sa markup-om (XAML). Ovaj tip koda se naziva code-behind.
+
+Primer prikazuje proširen markup kod (XAML) a zatim code-behind koji odgovara tom kodu.
+
+\FigurePlaceholder{slika-12.png}{Slika 12. Proširen markup kod sa event handler-om}
+\FigurePlaceholder{slika-13.png}{Slika 13. Code behind sa event handler-om}
+
+InitializeComponent metoda se poziva iz code-behind-a, iz konstruktora klase. Ova metoda zadužena je da spoji (eng. merge) UI koji se definisan u markup kodu sa code-behind klasom.
+
+\textbf{Napomena:} InitializeComponent se generiše za vas kada se kreira aplikacija i ne treba je implementirati ručno.
+
+U primeru se takođe može videti kako je implementiran event handler za Click događaj. Kada se klikne, event handler prikazuje message box pozivajući \texttt{System.Windows.MessageBox.Show} metodu.
+
+\section{Događaji i obrada događaja (eng. Events and handling events)}
+\MigrationNote{Keep concept, update screenshots and event handler generation workflow in Rider.}
+
+Većina UI framework-a su event driven. Sve kontrole, uključujući Window kontrolu, izlažu događaje na koje se može odreagovati. Možete se prijaviti (eng. subscribe) na ove događaje, što znači da će vaša aplikacija biti obaveštena kada se ovaj događaj desi i tada je moguće odreagovati na određeni način. Reakcija na događaj se zapravo definiše u event handler-u.
+
+Postoji više tipova događaja ali oni koji se najčešće koriste su vezani za interakciju sa mišem ili tastaturom. Na većini kontrola mogu se definisati događaji kao što su: KeyDown, KeyUp, MouseDown, MouseEnter, MouseLeave, MouseUp.
+
+Postoji više načina za dodavanje događaja.
+
+Moguće je ručno dodavanje događaja u okviru kontrole za koju se želi zakačiti.
+
+\FigurePlaceholder{slika-14.png}{Slika 14. Dodavanje događaja}
+
+Odabirom Click događaja, pojaviće se opcija New Event Handler na čiji odabir će okruženje kreirati za vas prazan event handler u code behind.
+
+\FigurePlaceholder{slika-15.png}{Slika 15. Automatsko kreiranje event handler-a za događaj}
+
+Kreirana metoda (event handler) u code behind prikazana je na slici.
+
+\FigurePlaceholder{slika-16.png}{Slika 16. Automatski kreiran event handler u code behind-u}
+
+Nakon kreiranja event handler-a, dugme u code behind-u izgleda kao na slici.
+
+\FigurePlaceholder{slika-17.png}{Slika 17. Izgled dugmeta u XAML kodu nakon dodavanja event handler-a}
+
+Drugi način je preko Properties tool-a. Na ovom mestu mogu se pronaći svi događaji koji mogu biti zakačeni za selektovanu kontrolu.
+
+\FigurePlaceholder{slika-18.png}{Slika 18. Dodavanje event-a i event handler-a preko Properties tool-a}
+
+Odabirom naznačene opcije u Properties tool-u mogu se pregledati i svi atributi koji se mogu dodati na kontrolu.
+
+\FigurePlaceholder{slika-19.png}{Slika 19. Dodavanje atributa preko Properties tool-a}
+
+\section{Paneli (eng. Panels)}
+\MigrationNote{Keep content; update any WPF-only remarks, verify Avalonia behavior where defaults differ.}
+
+Panel, kao jedna od najvažnijih kontrola, predstavlja kontejner za druge kontrole i upravlja sa rasporedom istih na prozoru. S obzirom da Window kontrola može da ima samo jednu child kontrolu, obično se koristi panel da podeli prostor na regije gde svaka regija može ponovo biti panel.
+
+U nastavku će biti navedeni i objašnjeni neki od panela koji se koriste u WPF-u.
+
+\subsection{Wrap panel}
+WrapPanel pozicionira svaku od svojih child kontrola jednu do druge, horizontalno (default varijanta) ili vertikalno, dokle god ima dovoljno prostora. Kada ne postoji dovoljno prostora, child elementi se wrap-uju u novi red i nastavlja se njihovo ređanje.
+
+WrapPanel treba koristiti kada imamo listu kontrola koje želimo da rasporedimo vertikalno ili horizontalno.
+
+Kada WrapPanel koristi horizontalnu orijentaciju, child kontrole će imati istu visinu, zasnovanu na visini najvišeg elementa. Kada je WrapPanel vertikalno orijentisan, child kontrole će imati istu širinu kao najširi element.
+
+\FigurePlaceholder{slika-20.png}{Slika 20. PrimerVezbe3 - WrapPanel}
+
+Na slici je dat primer rasporeda elemenata u okviru Wrap panela.
+
+\FigurePlaceholder{slika-21.png}{Slika 21. PrimerVezbe3 – Izgled WrapPanel-a nakon pokretanja aplikacije}
+
+\subsection{Stack panel}
+StackPanel je veoma sličan Wrap panelu ali sa jednom važnom razlikom, ne wrap-uje sadržaj. Omogućava da se elementi ređaju jedan na drugi, u određenom smeru.
+
+\FigurePlaceholder{slika-22.png}{Slika 22. PrimerVezbe3 – StackPanel}
+\FigurePlaceholder{slika-23.png}{Slika 23. PrimerVezbe3 - Izgled StackPanel-a nakon pokretanja aplikacije}
+
+Treba primetiti da je default ponašanje Stack panela da razvlači (eng. Stretch) svoje chid kontrole.
+
+StackPanel koji ima vertikalnu orijentaciju, sve svoje child kontrole rasteže horizontalno. Kada je u pitanju StackPanel sa horizontalnom orijentacijom, sve child kontrole se rastežu vertikalno.
+
+StackPanel omogućava to zato što su HorizontalAlignment ili VerticalAlignment property na njegovim child kontrolama postavljeni na Stretch. Ovo ponašanje se može promeniti.
+
+Takođe treba uočiti da je default orijentacija za StackPanel Vertical, za razliku od WrapPanel kod kog je Horizontal.
+
+\subsection{Grid panel}
+Grid može da sadrži više redova i kolona. Moguće je definisati visinu za svaki od redova ili širinu za svaku kolonu. Visina ili širina se mogu definisati na više načina, kao broj piksela, procentima u zavisnosti od slobodnog prostora ili da se vrednost prilagodi veličini sadržaja.
+
+Uz pomoć RowDefinition atributa odredili smo da će Grid panel imati 3 reda. Za prva dva reda visina je postavljena na Auto.
+
+Kako smo odredili koliko će Grid imati redova, možemo da odredimo i koliko kolona želimo u Grid-u. Ovo ćemo uraditi uz pomoć ColumnDefinition atributa. Za prve dve kolone širina je postavljena na Auto dok je za treću uzeta default vrednost.
+
+Default vrednost za širinu je GridLength i predstavlja "1*" veličinu.
+
+\FigurePlaceholder{slika-24.png}{Slika 24. PrimerVezbe3 - GridPanel}
+
+U XAML kodu možemo primetiti da je dodato 6 dugmića i da je za svaki definisano u kojoj koloni i redu se nalazi. Ovakvo ponašanje omogućavaju Grid.Column i Grid.Row atributi.
+
+Osim toga, dodati su atributi koji određuju boju pozadine, kao i ColumnSpan i RowSpan.
+
+\FigurePlaceholder{slika-25.png}{Slika 25. PrimerVezbe3 - Izgled GridPanel-a nakon pokretanja aplikacije}
+
+\subsection{Dock panel}
+DockPanel olakšava raspoređivanje sadržaja u 4 smera (top, bottom, left, right). Predstavlja najbolji izbor kada je potrebno podeliti prozor u specifične sekcije, naročito zbog toga što poslednji element u DockPanelu, po default-u, zauzima preostali prostor (center). Na taj način se sav prostor u prozoru zauzima.
+
+DockPanel.Dock property omogućava da odredimo smer gde će kontrola biti postavljena.
+
+\FigurePlaceholder{slika-26.png}{Slika 26. PrimerVezbe3 – DockPanel}
+
+Dugmići u drugom panelu su raspoređeni u različitim smerovima a dugme ‘CETIRI’ osim toga zauzima i centralni deo jer je poslednji naveden.
+
+\FigurePlaceholder{slika-27.png}{Slika 27. PrimerVezbe3 - Izgled DockPanel-a nakon pokretanja aplikacije}
+
+\subsection{Primer kombinacije više panela – Complex Layout}
+U primeru je iskorišćen DockPanel da bi se prostor podelio na sekcije.
+
+Na vrhu (DockPanel.Dock = “Top”) postavljen je jedan TextBlock. Ista stvar urađena je i na dnu prozora.
+
+Ostatak prostora popunjen je sa novim DockPanelom u okviru kog je kreiran StackPanel i dodat jedan TextBlock. StackPanel u sebi objedinjuje dva dugmeta a svaki od njih određen je atributima kao što su Height, Width i Margin.
+
+Ovim primerom pokazano je kako se kompozicijom više panela može napraviti željeni raspored komponenti.
+
+\FigurePlaceholder{slika-28.png}{Slika 28. PrimerVezbe3 - ComplexLayout}
+\FigurePlaceholder{slika-29.png}{Slika 29. PrimerVezbe3 - Izgled ComplexLayout-a nakon pokretanja aplikacije}
+
+\section{Data binding}
+\MigrationNote{Keep conceptual explanation; verify defaults and update examples to Avalonia binding syntax/behavior. Replace WPF docs link with Avalonia docs.}
+
+Većina aplikacija omogućava korisniku da manipuliše sa nekim podacima. Kada su podaci učitani u aplikaciju (npr. iz neke baze podataka) potrebno ih je prikazati korisniku. Osim toga, korisniku se često omogućava da menja te podatke pa se mora voditi računa da bude tačno stanje podataka u bazi.
+
+Da bi olakšao prikaz i interakciju sa podacima, WPF uvodi Data binding. Data binding predstavlja mehanizam koji omogućava komunikaciju UI elemenata sa podacima. Kada je binding uspostavljen i kada se podaci promene, moguće je automatski promeniti i UI elemente koji zavise od tih podataka. Obrnuto je takođe moguće.
+
+Moguće je vršiti binding između dve kontrole kao i binding na resurs.
+
+Da bi se mogle detektovati promene na source-u (primenjivo na OneWay and TwoWay bindings) source mora implementirati odgovarajući Property change notification mechanism kao što je INotifyPropertyChanged.
+
+O ovom interfejsu će više govora biti u nastavku kursa.
+
+Na primeru biće objašnjeni različiti načini upotrebe binding-a.
+
+\FigurePlaceholder{slika-30.png}{Slika 30. PrimerVezbe3 – Binding}
+
+\subsection{Binding na resurs – string (1)}
+Na slici je prikazano kako se može dodati resurs. U ovom slučaju, resursi su vezani za prozor tako da ih mogu koristiti sve kontrole iz tog prozora. Uz pomoć atributa x:Key se jedinstveno identifikuje i na taj način će mu se pristupati iz ostatka koda.
+
+\FigurePlaceholder{slika-31.png}{Slika 31. PrimerVezbe3 – Resursi zakačeni na Window tag}
+
+Ako želimo da TextBox kao svoj sadržaj ima tekst iz resursa, možemo to uraditi tako što ćemo Text property ove kontrole bindovati na resurs – string.
+
+Sa ključnom reči StaticResource označavamo da će se koristiti statički resurs a kao vrednost ResourceKey navodimo jedinstveni identifikator resursa kog želimo da koristimo.
+
+S obzirom da smo definisali vrednost x:Key kao “strTestBinding”, na ovaj način ćemo pozivati resurs.
+
+\FigurePlaceholder{slika-32.png}{Slika 32. PrimerVezbe3 – Binding na string}
+
+\subsection{Binding na resurs – boja (2)}
+Na slici možemo videti još jedan resurs. Ovaj resurs definisan je kao SolidColorBrush i koristiće se kao boja za selektovani tekst.
+
+Ovom resursu smo dodelili jedinstveni identifikator “clrSpecialColor”.
+
+TextBox nudi SelectionBrush i na ovom mestu možemo odrediti boju koja se koristi kada se selektuje tekst iz ovog TextBox-a. Tako je na ovom mestu odabran resurs i bindovan je na SelectionBrush.
+
+\FigurePlaceholder{slika-33.png}{Slika 33. PrimerVezbe3 – Binding na boju}
+\FigurePlaceholder{slika-34.png}{Slika 34. PrimerVezbe3 – Binding na boju - Rezultat selektovanja teksta}
+
+\subsection{One way – ka interfejsu (7)}
+OneWay binding – promene na source property (model) automatski osvežavaju target property (UI kontrola) ali promene na target property (UI kontrola) ne emituju svoje promene na source property (model).
+
+Na kratko ćemo zanemariti UpdateSourceTrigger, objašnjenje sledi u nastavku.
+
+\FigurePlaceholder{slika-35.png}{Slika 35. PrimerVezbe3 – One way binding}
+
+U ovom primeru biće navedeno kako bindovati “Test1” na Text property TextBox kontrole. “Test1” se nalazi u klasi SimpleBinding.xaml.cs.
+
+Da bi mogli da izvršimo binding, property iz code-behind-a sa nekom kontrolom (u ovom slučaju TextBox) u XAML kodu, potrebno je da popunimo DataContext.
+
+DataContext property je default source za naš binding, osim ako se ne specificira drugačije.
+
+Ne postoji default source za DataContext property (on je null na početku), ali s obzirom da se DataContext nasleđuje dalje u hijerarhiji kontrola, često je dovoljno postaviti DataContext na ceo prozor i dalje koristiti za sve child kontrole.
+
+\FigurePlaceholder{slika-36.png}{Slika 36. PrimerVezbe3 – Code behind – Test1 property}
+
+Nakon poziva InitalizeComponent() metode, postavljamo "this" referencu kao DataContext, što u suštini govori Window komponenti da želimo da on sam bude Data context u bindingu.
+
+\FigurePlaceholder{slika-37.png}{Slika 37. PrimerVezbe3 – Code behind – Konstruktor}
+
+\textbf{Napomena:} Obratiti pažnju na način kako funkcioniše!
+
+\subsection{Two way – bidirekciono (6)}
+TwoWay binding – promene na source property (model) ili target property (UI kontrola) automatski osvežavaju promene na drugom. Ovaj tip binding-a odgovara npr. situaciji kada se koriste forme za editovanje podataka.
+
+Na kratko ćemo zanemariti UpdateSourceTrigger, biće objašnjeno u nastavku.
+
+\textbf{Napomena:} Obratiti pažnju na način kako funkcioniše!
+
+\FigurePlaceholder{slika-38.png}{Slika 38. PrimerVezbe3 – Two way binding}
+
+\subsection{One way to source – ka kodu (8)}
+OneWayToSource binding – suprotno od OneWay binding-a. Osvežava source property (model) kada dođe do promene na target property (UI element).
+
+\textbf{Napomena:} Obratiti pažnju na način kako funkcioniše!
+
+\FigurePlaceholder{slika-39.png}{Slika 39. PrimerVezbe3 – One way to source binding}
+
+\subsection{Binding kontrole na kontrolu (3)}
+Osim binding-a na resurs ili na property iz code-behind-a, moguće je bindovati kontrolu na kontrolu. Ovaj proces podrazumeva da ponašanje jedne kontrole zavisi od ponašanja druge kontrole.
+
+U primeru se vidi kako vrednost TextBox kontrole zavisi od vrednosti Slider kontrole. Postiže se tako što Text property TextBox-a bindujemo na Value property Slider-a.
+
+Generička sintaksa za ovakav binding je:
+
+\begin{quote}
+\{Binding ElementName=keyName, Path=propertyName\}
+\end{quote}
+
+\FigurePlaceholder{slika-40.png}{Slika 40. PrimerVezbe3 – Binding kontrole na kontrolu}
+\FigurePlaceholder{slika-41.png}{Slika 41. PrimerVezbe3 – Binding kontrole na kontrolu – Prikaz nakon pokretanja aplikacije}
+
+\subsection{Binding kontrole na kontrolu - real time (4)}
+Binding kao što su TwoWay ili OneWayToSource osluškuju promene na target property (UI element) i propagiraju do source (model) i ovo je poznato kao “updating the source”. Npr. kada se edituje polje (TextBox) treba promeniti source value. Ova promena može da bude istog momenta (eng. real-time) ili kada se izgubi fokus. Binding.UpdateSourceTrigger property određuje kada će se ova promena zaista desiti.
+
+Ako je vrednost za UpdateSourceTrigger postavljena na LostFocus, onda će se vrednost source-a promeniti na novu vrednost tek nakon što polje u koje ste unosili vrednost izgubi fokus.
+
+Default vrednost UpdateSourceTrigger za većinu je PropertyChanged, dok je za TextBox.Text property LostFocus.
+
+\FigurePlaceholder{slika-42.png}{Slika 42. PrimerVezbe3 - Real time binding kontrole na kontrolu}
+\FigurePlaceholder{slika-43.png}{Slika 43. PrimerVezbe3 - Real time binding kontrole na kontrolu - Prikaz nakon pokretanja aplikacije}
+
+\subsection{Binding kontrole na kontrolu - real time + konverzija (5)}
+Ako se u procesu binding-a želi iskoristiti konverzija, to se može lako uvesti uz pomoć Converter atributa. Dovoljno je navesti koji konverter će se koristiti. Da bi se kreirao konverter dovoljno je implementirati interface i implementirati telo Convert i ConvertBack metode.
+
+\FigurePlaceholder{slika-44.png}{Slika 44. PrimerVezbe3 - Real time binding kontrole na kontrolu i konverzija}
+\FigurePlaceholder{slika-45.png}{Slika 45. PrimerVezbe3 - Real time binding kontrole na kontrolu i konverzija - Prikaz nakon pokretanja aplikacije}
+\FigurePlaceholder{slika-46.png}{Slika 46. PrimerVezbe3 – Konverter klasa}
+
+\textbf{Napomena:} Obavezno pogledati primer u kodu!
+
+\subsection{Binding na listu (9)}
+U ovom primeru biće navedeno kako bindovati ComboBox vrednosti na vrednosti neke liste.
+
+‘Test3’ predstavlja ObservableCollection u klasi SimpleBinding i sadržaće niz string vrednosti koje želimo prikazati u ComboBox kontroli.
+
+Da bi mogli da povežemo ovu kolekciju iz SimpleBinding klase (code-behind) sa nekom kontrolom u XAML kodu, potrebno je da popunimo DataContext.
+
+Upotreba DataContext objašnjena je u primeru sa One-way binding-om.
+
+\textbf{Napomena:} Obavezno pogledati primer u kodu!
+
+\FigurePlaceholder{slika-47.png}{Slika 47. PrimerVezbe3 – Binding na listu vrednosti}
+\FigurePlaceholder{slika-48.png}{Slika 48. PrimerVezbe3 – Code behind – Kolekcija}
+
+Klikom na dugme poziva se metoda u kojoj se vrši dodavanje elemenata u kolekciju.
+
+\textbf{Napomena:} Obavezno pogledati da li će se promena manifestovati na ComboBox!
+
+\section*{DODATAK}
+\MigrationNote{Rewrite appendix to Avalonia control list and links.}
+
+Kontrole podeljene po funkciji, preuzeto sa docs.microsoft.com.
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Buttons:} Button and RepeatButton.
+  \item \textbf{Data Display:} DataGrid, ListView, and TreeView.
+  \item \textbf{Date Display and Selection:} Calendar and DatePicker.
+  \item \textbf{Dialog Boxes:} OpenFileDialog, PrintDialog, and SaveFileDialog.
+  \item \textbf{Digital Ink:} InkCanvas and InkPresenter.
+  \item \textbf{Documents:} DocumentViewer, FlowDocumentPageViewer, FlowDocumentReader, FlowDocumentScrollViewer, and StickyNoteControl.
+  \item \textbf{Input:} TextBox, RichTextBox, and PasswordBox.
+  \item \textbf{Layout:} Border, BulletDecorator, Canvas, DockPanel, Expander, Grid, GridView, GridSplitter, GroupBox, Panel, ResizeGrip, Separator, ScrollBar, ScrollViewer, StackPanel, Thumb, Viewbox, VirtualizingStackPanel, Window, and WrapPanel.
+  \item \textbf{Media:} Image, MediaElement, and SoundPlayerAction.
+  \item \textbf{Menus:} ContextMenu, Menu, and ToolBar.
+  \item \textbf{Navigation:} Frame, Hyperlink, Page, NavigationWindow, and TabControl.
+  \item \textbf{Selection:} CheckBox, ComboBox, ListBox, RadioButton, and Slider.
+  \item \textbf{User Information:} AccessText, Label, Popup, ProgressBar, StatusBar, TextBlock, and ToolTip.
+\end{itemize}
+
+Češto korišćeni layout-i, preuzeto sa docs.microsoft.com.
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Canvas:} Child controls provide their own layout.
+  \item \textbf{DockPanel:} Child controls are aligned to the edges of the panel.
+  \item \textbf{Grid:} Child controls are positioned by rows and columns.
+  \item \textbf{StackPanel:} Child controls are stacked either vertically or horizontally.
+  \item \textbf{VirtualizingStackPanel:} Child controls are virtualized and arranged on a single line that is either horizontally or vertically oriented.
+  \item \textbf{WrapPanel:} Child controls are positioned in left-to-right order and wrapped to the next line when there are more controls on the current line than space allows.
+\end{itemize}
+
+Korisni linkovi:
+
+\begin{itemize}[leftmargin=*]
+  \item \url{https://docs.microsoft.com/en-us/dotnet/desktop-wpf/data/data-binding-overview}
+\end{itemize}
+
+\end{document}
