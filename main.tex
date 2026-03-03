@@ -1,7 +1,7 @@
 % !TeX program = pdflatex
-% Phase 1 migration: structure + WPF text transcribed into LaTeX.
-% NOTE: This document intentionally preserves WPF wording for now.
-% Next phases will rewrite sections to Avalonia + Rider.
+% Migration to Avalonia + Rider (cross-platform).
+% Phase 1: extracted structure/text from the original WPF PDF into LaTeX.
+% Phase 2: started rewriting tooling sections (Rider + Avalonia templates).
 
 \documentclass[11pt,a4paper]{article}
 
@@ -28,7 +28,7 @@
 
 \newcommand{\MigrationNote}[1]{%
   \begin{quote}
-    \color{black!75}\textbf{Migration note (Phase 1):} #1
+    \color{black!75}\textbf{Migration note:} #1
   \end{quote}
 }
 
@@ -43,79 +43,107 @@
 \begin{document}
 \maketitle
 
-\section*{Migration Checklist (Phase 1)}
-\MigrationNote{This is an extraction of the existing WPF PDF into LaTeX. Content is preserved; wording is not yet adapted to Avalonia + Rider. Figures are placeholders (original screenshots are not imported yet).}
+\section*{Migration Status}
+\MigrationNote{This document started as a WPF PDF extraction (Phase 1). Tooling sections are now being rewritten for Avalonia + Rider (Phase 2). Figures are placeholders and will be replaced with Rider screenshots.}
 
 \begin{itemize}[leftmargin=*,nosep]
-  \item \textbf{Keep (concepts):} markup vs code-behind, events, layout panels, data binding, resources, converters.
-  \item \textbf{Rewrite (tooling):} project creation steps, IDE workflow, designer/toolbox references, screenshots.
-  \item \textbf{Replace (APIs/examples):} WPF-specific namespaces/types, MessageBox examples, WPF-specific validation/adorners, WPF documentation links.
-  \item \textbf{Re-shoot:} all Visual Studio screenshots (Rider cross-platform).
+  \item \textbf{Done:} LaTeX scaffold + preserved original structure/text.
+  \item \textbf{In progress:} Rider + Avalonia project creation/workflow sections.
+  \item \textbf{Next:} convert WPF-specific APIs/examples to Avalonia equivalents; update screenshots; update docs links.
 \end{itemize}
 
 \tableofcontents
 \newpage
 
-\section{Uvod u WPF}
-\MigrationNote{Rewrite section as \emph{Uvod u Avalonia}. Keep GUI/XAML framing, replace WPF-specific statements with Avalonia equivalents and cross-platform positioning.}
+\section{Uvod u Avalonia}
+\MigrationNote{Phase 2: section is updated for Avalonia + Rider. Remaining sections still reflect WPF and will be migrated in later phases.}
 
-Windows Presentation Foundation (WPF) je GUI (Graphical User Interface) framework za kreiranje Windows desktop aplikacija.
+Avalonia UI je cross-platform GUI (Graphical User Interface) framework za kreiranje desktop aplikacija na Windows-u, Linux-u i macOS-u.
 
-GUI framework omogućava da kreiramo aplikacije uz pomoć velikog opsega GUI elemenata kao što su labele (eng. labels), polja za unos teksta (eng. textboxes). Bez GUI framework-a, morali bi da crtamo ove elemente ručno i da upravljamo sa svim korisničkim interakcijama, kao što je unos teksta ili pomeranje miša.
+GUI framework omogućava da kreiramo aplikacije uz pomoć velikog opsega GUI elemenata kao što su labele (eng. labels) i polja za unos teksta (eng. textboxes). Bez GUI framework-a, morali bi da crtamo ove elemente ručno i da upravljamo sa svim korisničkim interakcijama, kao što je unos teksta ili pomeranje miša.
 
-WPF sadrži set application-development alata (eng. features): Application Markup Language (XAML), kontrole, Data binding, layouts, 2D i 3D grafika, animacije, stilovi, media i slično.
+Avalonia sadrži set application-development alata (eng. features): XAML, kontrole, data binding, layouts, 2D grafika, animacije, stilovi, media i slično.
 
-\subsection{Kreiranje WPF projekta}
-\MigrationNote{Replace with Rider + \texttt{dotnet new} Avalonia templates instructions. Replace all screenshots.}
+\subsection{Kreiranje Avalonia projekta (Rider)}
+\MigrationNote{Phase 2: instructions are Rider-first with a CLI fallback, to be OS-agnostic.}
 
-Jedan od načina kreiranja novog WPF projekta je odabirom File/New/Project.
+\textbf{Preduslovi:}
 
-\FigurePlaceholder{slika-1.png}{Slika 1. Kreiranje novog projekta}
+\begin{itemize}[leftmargin=*]
+  \item .NET SDK (8.0 ili noviji)
+  \item JetBrains Rider
+  \item (Opcionalno) Rider plugin \textit{AvaloniaRider} za live XAML preview
+\end{itemize}
 
-Potrebno je odabrati WPF App (.NET Framework) i popuniti Name i Location polja.
+\textbf{Instalacija Avalonia templates:}
 
-\FigurePlaceholder{slika-2.png}{Slika 2. Odabir WPF projekta}
+\begin{verbatim}
+dotnet new list
+dotnet new install Avalonia.Templates
+\end{verbatim}
+
+\textbf{Kreiranje projekta u Rider-u:}
+
+\begin{enumerate}[leftmargin=*]
+  \item Na početnom ekranu izaberite \textbf{New Solution}.
+  \item U sekciji \textbf{Custom Templates} izaberite \textbf{Avalonia .NET MVVM App} (preporučeno).
+  \item Unesite ime rešenja/projekta i lokaciju.
+  \item Kliknite \textbf{Create}.
+\end{enumerate}
+
+\FigurePlaceholder{slika-1.png}{Slika 1. Kreiranje novog Avalonia projekta u Rider-u}
+
+\textbf{Alternativa (command line):}
+
+\begin{verbatim}
+dotnet new avalonia.mvvm -o GetStartedApp
+\end{verbatim}
+
+\textbf{Pokretanje projekta:}
+
+U Rider-u kliknite \textbf{Run}. Alternativno, u terminalu pokrenite \texttt{dotnet run} iz desktop projekta (npr. \texttt{*.Desktop}).
+
+\FigurePlaceholder{slika-2.png}{Slika 2. Pokretanje Avalonia aplikacije (podrazumevani ekran)}
 
 \subsection{Markup i code-behind}
-\MigrationNote{Keep concept, update IDE navigation screenshots and Avalonia project file names.}
+\MigrationNote{Phase 2: section is updated for Avalonia + Rider. Screenshots are placeholders and will be re-captured.}
 
-WPF omogućava da se razvija aplikacija koristeći markup i code-behind.
+Avalonia omogućava da se razvija aplikacija koristeći markup i code-behind.
 
-XAML markup se obično koristi za implementaciju izgleda aplikacije dok se code behind koristi za implementaciju ponašanja tih komponenti.
+XAML markup se obično koristi za implementaciju izgleda aplikacije dok se code-behind koristi za implementaciju ponašanja tih komponenti.
 
 Ovo razdvajanje na izgled i ponašanje povlači neke od prednosti kao što su:
 
 \begin{enumerate}[leftmargin=*]
   \item Cena razvoja i održavanja aplikacije je smanjena jer je znatno lakše upravljati sa aplikacijom kod koje izgled i ponašanje nisu usko vezani (eng. tightly coupled).
   \item Razvoj aplikacije je ubrzan i efikasan jer dizajneri mogu implementirati izgled aplikacije nezavisno i paralelno od programera koji implementiraju ponašanje aplikacije.
-  \item Globalizacija i lokalizacija za WPF aplikacije je pojednostavljena.
+  \item Globalizacija i lokalizacija za desktop aplikacije je pojednostavljena.
 \end{enumerate}
 
-Na slici se može videti otvoren prazan WPF projekat i brojevi kojima su označeni najbitniji segmenti za razvoj WPF aplikacije.
+Na slici je prikazan prazan Avalonia projekat otvoren u Rider-u. Tipični segmenti rada su:
 
-Sa (1) označen je Toolbox u kom se nalaze sve WPF kontrole koje se mogu iskoristiti za kreiranje grafičkog korisničkog interfejsa. Sa brojem 2 označen je dizajner u kom se može pratiti izgled aplikacije u toku njenog kreiranja.
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Solution} prozor (pregled projekta i fajlova).
+  \item \textbf{XAML editor} (npr. \texttt{MainWindow.axaml}).
+  \item (Opcionalno) \textbf{XAML preview} uz Rider plugin \textit{AvaloniaRider}.
+  \item \textbf{Code-behind} fajl (npr. \texttt{MainWindow.axaml.cs}).
+\end{enumerate}
 
-Dodavanjem komponente iz Toolbox-a na prozor može se vršiti prevlačenjem (drag\&drop).
+Za razliku od tipičnog WPF+Visual Studio workflow-a, u Rider-u se kontrole najčešće dodaju pisanjem XAML-a uz code completion i snippet-e, a ne prevlačenjem iz Toolbox-a.
 
-Sa (3) označen je XAML kod (markup). Kada se kontrola prevuče na prozor (sekcija 2), u XAML kodu (sekcija 3) pojaviće se odgovarajući tag. Takođe, dodavanjem taga u XAML kod (sekcija 3), promene će se manifestovati u prozoru (sekcija 2).
+\FigurePlaceholder{slika-3.png}{Slika 3. Rider okruženje: Solution, XAML editor i (opciono) XAML preview}
 
-Sekcija 4 predstavlja Solution Explorer gde se može vršiti pregled fajlova u projektu.
+Otvaranjem \texttt{MainWindow.axaml.cs} dobija se code-behind.
 
-Na slici možemo primetiti da je otvoren MainWindow.xaml fajl što zapravo predstavlja XAML kod ovog projekta.
+\FigurePlaceholder{slika-4.png}{Slika 4. Code-behind (\texttt{*.axaml.cs})}
 
-\FigurePlaceholder{slika-3.png}{Slika 3. Okruženje i XAML kod}
+Prelazak između XAML fajla i code-behind fajla vrši se iz \textbf{Solution} prozora ili korišćenjem pretrage (Search Everywhere).
 
-Ako se u Solution Exploreru (sekcija 4) otvori MainWindow.xaml.cs dobija se code behind.
+\FigurePlaceholder{slika-5.png}{Slika 5. Navigacija: otvaranje \texttt{MainWindow.axaml.cs} iz Solution prozora}
 
-\FigurePlaceholder{slika-4.png}{Slika 4. Code behind}
+Ako koristite XAML preview, obično je dostupan kao kartica \textbf{Preview} pored XAML editora (uz instaliran \textit{AvaloniaRider} plugin).
 
-Osim odabirom iz Solution Explorera, jednostavan način da se iz XAML koda pređe na .cs fajl je desni klik i odabir View Code opcije iz padajućeg menija.
-
-\FigurePlaceholder{slika-5.png}{Slika 5. Prelazak sa XAML koda na Code behind}
-
-Prelazak iz .cs fajla na dizajner (XAML) moguć je pomoću desni klik pa na View Designer opciju.
-
-\FigurePlaceholder{slika-6.png}{Slika 6. Prelazak sa Code behind na XAML kod}
+\FigurePlaceholder{slika-6.png}{Slika 6. XAML preview u Rider-u (opciono)}
 
 \section{Markup (XAML)}
 \MigrationNote{Keep most content; update XAML namespaces to Avalonia and use Avalonia examples.}
