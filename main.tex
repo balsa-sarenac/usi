@@ -22,7 +22,7 @@
   urlcolor=blue!50!black
 }
 
-\title{Interakcija čovek -- računar\\Vežbe 3}
+\title{Uvod u softversko inženjerstvo\\Avalonia UI framework}
 \author{Fakultet tehničkih nauka\\Univerzitet u Novom Sadu}
 \date{}
 
@@ -146,15 +146,26 @@ Ako koristite XAML preview, obično je dostupan kao kartica \textbf{Preview} por
 \FigurePlaceholder{slika-6.png}{Slika 6. XAML preview u Rider-u (opciono)}
 
 \section{Markup (XAML)}
-\MigrationNote{Keep most content; update XAML namespaces to Avalonia and use Avalonia examples.}
+\MigrationNote{Phase 2: section is updated for Avalonia. Examples use \texttt{.axaml} and Avalonia XAML namespaces.}
 
 XAML je XML-bazirani markup jezik koji omogućava implementiranje izgleda aplikacije (eng. application's appearance). Koristi se za kreiranje prozora, jednostavnih dijaloga i kontrola a navedeno dalje možemo popunjavati sa novim kontrolama, oblicima i grafičkim elementima.
 
-Primer prikazuje XAML kod jednostavnog prozora (tag \texttt{<Window>}) koji sadrži samo jedno dugme (tag \texttt{<Button>}).
+U Avalonia projektima XAML fajlovi obično imaju ekstenziju \texttt{.axaml} (npr. \texttt{MainWindow.axaml}).
 
-\FigurePlaceholder{slika-7.png}{Slika 7. Jednostavan prozor sa jednim dugmetom}
+Primer prikazuje Avalonia XAML kod jednostavnog prozora (tag \texttt{<Window>}) koji sadrži samo jedno dugme (tag \texttt{<Button>}).
 
-Svaki element može da sadrži određene atribute, slično kao u XML-u. U primeru se vidi da tag \texttt{<Window>} sadrži Title atribut koji je zapravo title-bar tekst.
+\begin{verbatim}
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="GetStartedApp.Views.MainWindow"
+        Title="MainWindow" Width="800" Height="450">
+  <Button Content="Click me" />
+</Window>
+\end{verbatim}
+
+\FigurePlaceholder{slika-7.png}{Slika 7. Jednostavan prozor sa jednim dugmetom (Avalonia XAML)}
+
+Svaki element može da sadrži određene atribute, slično kao u XML-u. U primeru se vidi da tag \texttt{<Window>} sadrži Title atribut koji je zapravo tekst u title baru.
 
 U primeru je prikazano kako se uz pomoć FontWeight property može postaviti boldovan tekst sa sadržajem “A button”.
 
@@ -172,67 +183,112 @@ Tekst u tekst blokovima je obojen različitim bojama koristeći atribut Foregrou
 
 \FigurePlaceholder{slika-10.png}{Slika 10. Složeni oblik dugmeta - prvi način}
 
-Content property dozvoljava samo jedan child element pa je bilo potrebno obuhvatiti child komeponente u WrapPanel. Paneli, kao što je WrapPanel, igraju veoma važnu ulogu u WPF i predstavljaju kontejnere za druge kontrole.
+Content property dozvoljava samo jedan child element pa je bilo potrebno obuhvatiti child komeponente u WrapPanel. Paneli, kao što je WrapPanel, igraju veoma važnu ulogu u Avalonia i predstavljaju kontejnere za druge kontrole.
 
 Isti rezultat se može postići na sledeći način. Ovaj način je jednostavniji i češće je u upotrebi.
 
 \FigurePlaceholder{slika-11.png}{Slika 11. Složeni oblik dugmeta - drugi način}
 
 \section{Code-behind}
-\MigrationNote{Keep concept; update namespaces and examples to Avalonia (no \texttt{System.Windows.MessageBox}).}
+\MigrationNote{Phase 2: section is updated for Avalonia. Example uses Avalonia event args and avoids \texttt{System.Windows.*}.}
 
-Osnovna odlika svake aplikacije je da implementira funkcionalnosti, uključujući obradu događaja (eng. handling events) kao što je korisnički klik. U WPF-u, ponašanje nakon okidanja dođaja se implementira u kodu koji je povezan sa markup-om (XAML). Ovaj tip koda se naziva code-behind.
+Osnovna odlika svake aplikacije je da implementira funkcionalnosti, uključujući obradu događaja (eng. handling events) kao što je korisnički klik. U Avalonia, ponašanje nakon okidanja događaja se može implementirati u kodu koji je povezan sa markup-om (XAML). Ovaj tip koda se naziva code-behind.
 
-Primer prikazuje proširen markup kod (XAML) a zatim code-behind koji odgovara tom kodu.
+Primer prikazuje XAML kod sa event handler-om, a zatim code-behind koji odgovara tom kodu.
+
+\begin{verbatim}
+<!-- MainWindow.axaml -->
+<Button Content="Klikni me" Click="Button_Click" />
+\end{verbatim}
+
+\begin{verbatim}
+// MainWindow.axaml.cs
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+
+public partial class MainWindow : Window
+{
+    public MainWindow()
+    {
+        InitializeComponent();
+    }
+
+    private void Button_Click(object? sender, RoutedEventArgs e)
+    {
+        Title = "Kliknuto!";
+    }
+}
+\end{verbatim}
 
 \FigurePlaceholder{slika-12.png}{Slika 12. Proširen markup kod sa event handler-om}
 \FigurePlaceholder{slika-13.png}{Slika 13. Code behind sa event handler-om}
 
-InitializeComponent metoda se poziva iz code-behind-a, iz konstruktora klase. Ova metoda zadužena je da spoji (eng. merge) UI koji se definisan u markup kodu sa code-behind klasom.
+InitializeComponent metoda se poziva iz code-behind-a, iz konstruktora klase. Ova metoda zadužena je da spoji (eng. merge) UI koji se definiše u markup kodu sa code-behind klasom.
 
 \textbf{Napomena:} InitializeComponent se generiše za vas kada se kreira aplikacija i ne treba je implementirati ručno.
 
-U primeru se takođe može videti kako je implementiran event handler za Click događaj. Kada se klikne, event handler prikazuje message box pozivajući \texttt{System.Windows.MessageBox.Show} metodu.
-
 \section{Događaji i obrada događaja (eng. Events and handling events)}
-\MigrationNote{Keep concept, update screenshots and event handler generation workflow in Rider.}
+\MigrationNote{Phase 2: section is updated for Avalonia + Rider. Replaces Visual Studio Properties/Designer workflow with XAML-first editing.}
 
-Većina UI framework-a su event driven. Sve kontrole, uključujući Window kontrolu, izlažu događaje na koje se može odreagovati. Možete se prijaviti (eng. subscribe) na ove događaje, što znači da će vaša aplikacija biti obaveštena kada se ovaj događaj desi i tada je moguće odreagovati na određeni način. Reakcija na događaj se zapravo definiše u event handler-u.
+Većina UI framework-a su event driven. Sve kontrole, uključujući \texttt{Window} kontrolu, izlažu događaje na koje se može odreagovati. Možete se prijaviti (eng. subscribe) na ove događaje, što znači da će vaša aplikacija biti obaveštena kada se ovaj događaj desi i tada je moguće odreagovati na određeni način. Reakcija na događaj se zapravo definiše u event handler-u.
 
-Postoji više tipova događaja ali oni koji se najčešće koriste su vezani za interakciju sa mišem ili tastaturom. Na većini kontrola mogu se definisati događaji kao što su: KeyDown, KeyUp, MouseDown, MouseEnter, MouseLeave, MouseUp.
+Postoji više tipova događaja ali oni koji se najčešće koriste su vezani za interakciju sa mišem ili tastaturom. U Avalonia se često koriste događaji kao što su: \texttt{KeyDown}, \texttt{KeyUp}, \texttt{PointerPressed}, \texttt{PointerReleased}, \texttt{PointerEntered}, \texttt{PointerExited}.
 
-Postoji više načina za dodavanje događaja.
+\subsection{Dodavanje event handler-a u Avalonia (Rider)}
 
-Moguće je ručno dodavanje događaja u okviru kontrole za koju se želi zakačiti.
+\textbf{1) Direktno u XAML-u}
 
-\FigurePlaceholder{slika-14.png}{Slika 14. Dodavanje događaja}
+U XAML-u dodajte handler kao atribut kontrole (npr. dugmeta). Ako metoda ne postoji, Rider obično nudi quick-fix (\textbf{Alt+Enter}) da se kreira metoda u odgovarajućem code-behind fajlu.
 
-Odabirom Click događaja, pojaviće se opcija New Event Handler na čiji odabir će okruženje kreirati za vas prazan event handler u code behind.
+\begin{verbatim}
+<!-- MainWindow.axaml -->
+<Button Content="Klik" Click="Button_Click" />
+\end{verbatim}
 
-\FigurePlaceholder{slika-15.png}{Slika 15. Automatsko kreiranje event handler-a za događaj}
+\begin{verbatim}
+// MainWindow.axaml.cs
+using Avalonia.Interactivity;
 
-Kreirana metoda (event handler) u code behind prikazana je na slici.
+private void Button_Click(object? sender, RoutedEventArgs e)
+{
+    // reakcija na klik
+}
+\end{verbatim}
 
-\FigurePlaceholder{slika-16.png}{Slika 16. Automatski kreiran event handler u code behind-u}
+\FigurePlaceholder{slika-14.png}{Slika 14. Dodavanje događaja kao XAML atribut (Rider)}
 
-Nakon kreiranja event handler-a, dugme u code behind-u izgleda kao na slici.
+\textbf{2) Pretplata u code-behind-u}
 
-\FigurePlaceholder{slika-17.png}{Slika 17. Izgled dugmeta u XAML kodu nakon dodavanja event handler-a}
+Drugi način je da se pretplatite na događaj u konstruktoru (posle \texttt{InitializeComponent()}). U tom slučaju najčešće je potrebno pronaći kontrolu po imenu (\texttt{Name} / \texttt{x:Name}).
 
-Drugi način je preko Properties tool-a. Na ovom mestu mogu se pronaći svi događaji koji mogu biti zakačeni za selektovanu kontrolu.
+\begin{verbatim}
+// MainWindow.axaml
+<Button x:Name="MyButton" Content="Klik" />
+\end{verbatim}
 
-\FigurePlaceholder{slika-18.png}{Slika 18. Dodavanje event-a i event handler-a preko Properties tool-a}
+\begin{verbatim}
+// MainWindow.axaml.cs
+using Avalonia.Controls;
+using Avalonia.Interactivity;
 
-Odabirom naznačene opcije u Properties tool-u mogu se pregledati i svi atributi koji se mogu dodati na kontrolu.
+public MainWindow()
+{
+    InitializeComponent();
+    var button = this.FindControl<Button>("MyButton");
+    button.Click += Button_Click;
+}
+\end{verbatim}
 
-\FigurePlaceholder{slika-19.png}{Slika 19. Dodavanje atributa preko Properties tool-a}
+\FigurePlaceholder{slika-15.png}{Slika 15. Pretplata na događaj u code-behind-u (Rider)}
+
+\textbf{Napomena:} Avalonia nema WPF-ov "Properties" panel za događaje na isti način kao Visual Studio designer; u praksi se handler-i dodaju kroz XAML ili kod.
 
 \section{Paneli (eng. Panels)}
-\MigrationNote{Keep content; update any WPF-only remarks, verify Avalonia behavior where defaults differ.}
+\MigrationNote{Phase 2: panels section is largely identical between WPF and Avalonia; text is kept with minor wording updates.}
 
 Panel, kao jedna od najvažnijih kontrola, predstavlja kontejner za druge kontrole i upravlja sa rasporedom istih na prozoru. S obzirom da Window kontrola može da ima samo jednu child kontrolu, obično se koristi panel da podeli prostor na regije gde svaka regija može ponovo biti panel.
 
-U nastavku će biti navedeni i objašnjeni neki od panela koji se koriste u WPF-u.
+U nastavku će biti navedeni i objašnjeni neki od panela koji se koriste u Avalonia.
 
 \subsection{Wrap panel}
 WrapPanel pozicionira svaku od svojih child kontrola jednu do druge, horizontalno (default varijanta) ili vertikalno, dokle god ima dovoljno prostora. Kada ne postoji dovoljno prostora, child elementi se wrap-uju u novi red i nastavlja se njihovo ređanje.
@@ -302,17 +358,15 @@ Ovim primerom pokazano je kako se kompozicijom više panela može napraviti žel
 \FigurePlaceholder{slika-29.png}{Slika 29. PrimerVezbe3 - Izgled ComplexLayout-a nakon pokretanja aplikacije}
 
 \section{Data binding}
-\MigrationNote{Keep conceptual explanation; verify defaults and update examples to Avalonia binding syntax/behavior. Replace WPF docs link with Avalonia docs.}
+\MigrationNote{Phase 2: section is updated for Avalonia. Examples still use placeholders; they will be aligned to the new course project in a later step.}
 
 Većina aplikacija omogućava korisniku da manipuliše sa nekim podacima. Kada su podaci učitani u aplikaciju (npr. iz neke baze podataka) potrebno ih je prikazati korisniku. Osim toga, korisniku se često omogućava da menja te podatke pa se mora voditi računa da bude tačno stanje podataka u bazi.
 
-Da bi olakšao prikaz i interakciju sa podacima, WPF uvodi Data binding. Data binding predstavlja mehanizam koji omogućava komunikaciju UI elemenata sa podacima. Kada je binding uspostavljen i kada se podaci promene, moguće je automatski promeniti i UI elemente koji zavise od tih podataka. Obrnuto je takođe moguće.
+Da bi olakšala prikaz i interakciju sa podacima, Avalonia koristi data binding. Data binding predstavlja mehanizam koji omogućava komunikaciju UI elemenata sa podacima. Kada je binding uspostavljen i kada se podaci promene, moguće je automatski promeniti i UI elemente koji zavise od tih podataka. Obrnuto je takođe moguće.
 
 Moguće je vršiti binding između dve kontrole kao i binding na resurs.
 
-Da bi se mogle detektovati promene na source-u (primenjivo na OneWay and TwoWay bindings) source mora implementirati odgovarajući Property change notification mechanism kao što je INotifyPropertyChanged.
-
-O ovom interfejsu će više govora biti u nastavku kursa.
+Da bi se mogle detektovati promene na source-u (primenjivo na OneWay i TwoWay binding), source mora implementirati odgovarajući mehanizam notifikacije promena, kao što je \texttt{INotifyPropertyChanged}.
 
 Na primeru biće objašnjeni različiti načini upotrebe binding-a.
 
@@ -385,21 +439,25 @@ Osim binding-a na resurs ili na property iz code-behind-a, moguće je bindovati 
 
 U primeru se vidi kako vrednost TextBox kontrole zavisi od vrednosti Slider kontrole. Postiže se tako što Text property TextBox-a bindujemo na Value property Slider-a.
 
-Generička sintaksa za ovakav binding je:
+Generička sintaksa za ovakav binding u Avalonia može biti:
 
 \begin{quote}
-\{Binding ElementName=keyName, Path=propertyName\}
+\{Binding Value, ElementName=mySlider\}
+\end{quote}
+
+ili kraće, koristeći \texttt{\#} sintaksu za named kontrolu:
+
+\begin{quote}
+\{Binding \#mySlider.Value\}
 \end{quote}
 
 \FigurePlaceholder{slika-40.png}{Slika 40. PrimerVezbe3 – Binding kontrole na kontrolu}
 \FigurePlaceholder{slika-41.png}{Slika 41. PrimerVezbe3 – Binding kontrole na kontrolu – Prikaz nakon pokretanja aplikacije}
 
 \subsection{Binding kontrole na kontrolu - real time (4)}
-Binding kao što su TwoWay ili OneWayToSource osluškuju promene na target property (UI element) i propagiraju do source (model) i ovo je poznato kao “updating the source”. Npr. kada se edituje polje (TextBox) treba promeniti source value. Ova promena može da bude istog momenta (eng. real-time) ili kada se izgubi fokus. Binding.UpdateSourceTrigger property određuje kada će se ova promena zaista desiti.
+Binding kao što su TwoWay ili OneWayToSource osluškuju promene na target property (UI element) i propagiraju do source (model) i ovo je poznato kao “updating the source”. Npr. kada se edituje polje (TextBox) treba promeniti source vrednost.
 
-Ako je vrednost za UpdateSourceTrigger postavljena na LostFocus, onda će se vrednost source-a promeniti na novu vrednost tek nakon što polje u koje ste unosili vrednost izgubi fokus.
-
-Default vrednost UpdateSourceTrigger za većinu je PropertyChanged, dok je za TextBox.Text property LostFocus.
+\texttt{UpdateSourceTrigger} određuje kada će se promena sa kontrole preneti na source. U Avalonia, \texttt{TextBox.Text} se podrazumevano sinhronizuje na svako kucanje (\texttt{PropertyChanged}). Ako želite da se source ažurira tek kada kontrola izgubi fokus, koristite \texttt{UpdateSourceTrigger=LostFocus}.
 
 \FigurePlaceholder{slika-42.png}{Slika 42. PrimerVezbe3 - Real time binding kontrole na kontrolu}
 \FigurePlaceholder{slika-43.png}{Slika 43. PrimerVezbe3 - Real time binding kontrole na kontrolu - Prikaz nakon pokretanja aplikacije}
@@ -434,39 +492,32 @@ Klikom na dugme poziva se metoda u kojoj se vrši dodavanje elemenata u kolekcij
 \section*{DODATAK}
 \MigrationNote{Rewrite appendix to Avalonia control list and links.}
 
-Kontrole podeljene po funkciji, preuzeto sa docs.microsoft.com.
+Kontrole (Avalonia reference):
 
 \begin{itemize}[leftmargin=*]
-  \item \textbf{Buttons:} Button and RepeatButton.
-  \item \textbf{Data Display:} DataGrid, ListView, and TreeView.
-  \item \textbf{Date Display and Selection:} Calendar and DatePicker.
-  \item \textbf{Dialog Boxes:} OpenFileDialog, PrintDialog, and SaveFileDialog.
-  \item \textbf{Digital Ink:} InkCanvas and InkPresenter.
-  \item \textbf{Documents:} DocumentViewer, FlowDocumentPageViewer, FlowDocumentReader, FlowDocumentScrollViewer, and StickyNoteControl.
-  \item \textbf{Input:} TextBox, RichTextBox, and PasswordBox.
-  \item \textbf{Layout:} Border, BulletDecorator, Canvas, DockPanel, Expander, Grid, GridView, GridSplitter, GroupBox, Panel, ResizeGrip, Separator, ScrollBar, ScrollViewer, StackPanel, Thumb, Viewbox, VirtualizingStackPanel, Window, and WrapPanel.
-  \item \textbf{Media:} Image, MediaElement, and SoundPlayerAction.
-  \item \textbf{Menus:} ContextMenu, Menu, and ToolBar.
-  \item \textbf{Navigation:} Frame, Hyperlink, Page, NavigationWindow, and TabControl.
-  \item \textbf{Selection:} CheckBox, ComboBox, ListBox, RadioButton, and Slider.
-  \item \textbf{User Information:} AccessText, Label, Popup, ProgressBar, StatusBar, TextBlock, and ToolTip.
+  \item \url{https://docs.avaloniaui.net/docs/reference/controls/}
 \end{itemize}
 
-Češto korišćeni layout-i, preuzeto sa docs.microsoft.com.
+Češto korišćeni layout-i (concept):
 
 \begin{itemize}[leftmargin=*]
   \item \textbf{Canvas:} Child controls provide their own layout.
   \item \textbf{DockPanel:} Child controls are aligned to the edges of the panel.
   \item \textbf{Grid:} Child controls are positioned by rows and columns.
   \item \textbf{StackPanel:} Child controls are stacked either vertically or horizontally.
-  \item \textbf{VirtualizingStackPanel:} Child controls are virtualized and arranged on a single line that is either horizontally or vertically oriented.
   \item \textbf{WrapPanel:} Child controls are positioned in left-to-right order and wrapped to the next line when there are more controls on the current line than space allows.
 \end{itemize}
 
 Korisni linkovi:
 
 \begin{itemize}[leftmargin=*]
-  \item \url{https://docs.microsoft.com/en-us/dotnet/desktop-wpf/data/data-binding-overview}
+  \item \url{https://docs.avaloniaui.net/docs/get-started/}
+  \item \url{https://docs.avaloniaui.net/docs/get-started/xaml-previewers}
+  \item \url{https://docs.avaloniaui.net/docs/get-started/wpf/}
+  \item \url{https://docs.avaloniaui.net/docs/basics/data/data-binding/}
+  \item \url{https://docs.avaloniaui.net/docs/basics/data/data-binding/data-binding-syntax}
+  \item \url{https://docs.avaloniaui.net/docs/guides/data-binding/binding-to-controls}
+  \item \url{https://play.avaloniaui.net/}
 \end{itemize}
 
 \end{document}
