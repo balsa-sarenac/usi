@@ -38,6 +38,15 @@
 \begin{document}
 \maketitle
 
+\section*{Rešenje (Solution) i projekat (Project)}
+\textbf{Projekat} je jedna aplikacija ili biblioteka koja se kompajlira. U .NET svetu projekat je definisan fajlom \texttt{*.csproj}. U njemu se nalaze: target framework, reference na NuGet pakete, reference na druge projekte, opcije build-a, itd.
+
+\textbf{Rešenje} je kontejner koji organizuje više projekata u jednu celinu. Tipično je definisano fajlom \texttt{*.sln}. Rešenje ne sadrži kod koji se izvršava; služi za organizaciju u IDE-u (npr. jedan solution može sadržati više projekata: aplikacija + biblioteka + testovi).
+
+\textbf{Važno:} možete pokretati projekat i bez \texttt{*.sln} fajla. Komande kao što su \texttt{dotnet build} i \texttt{dotnet run} rade nad \texttt{*.csproj} (ili nad folderom koji ga sadrži).
+
+U ovom materijalu svaki mini-projekat je jedan zaseban folder sa jednim Avalonia projektom. Rider može da otvori folder projekta direktno (File/Open), i u tom slučaju će napraviti interni "solution model" bez potrebe da ručno kreirate \texttt{*.sln}.
+
 \section*{Kako koristiti materijal}
 Materijal je organizovan kao mini-projekti (po temi). Za svaku temu napravite novi projekat (Avalonia .NET App), pa onda copy/paste kod iz odgovarajuće sekcije.
 
@@ -149,6 +158,19 @@ Ako koristite XAML preview, obično je dostupan kao kartica \textbf{Preview} por
 
 \section{Markup (XAML)}
 
+\subsection*{Mini-projekat: 01-xaml}
+\textbf{Kada:} pre nego što krenete sa ovom sekcijom.
+
+\textbf{Kako (preporučeno):} kreirajte projekat iz terminala, pa otvorite folder u Rider-u.
+
+\begin{CodeBlock}
+dotnet new avalonia.app -o 01-xaml -n GetStartedApp
+\end{CodeBlock}
+
+U Rider-u otvorite folder \texttt{01-xaml} (File/Open) i pokrenite aplikaciju (Run).
+
+\textbf{Fajl koji menjate:} \texttt{MainWindow.axaml}
+
 XAML je XML-bazirani markup jezik koji omogućava implementiranje izgleda aplikacije (eng. application's appearance). Koristi se za kreiranje prozora, jednostavnih dijaloga i kontrola a navedeno dalje možemo popunjavati sa novim kontrolama, oblicima i grafičkim elementima.
 
 U Avalonia projektima XAML fajlovi obično imaju ekstenziju \texttt{.axaml} (npr. \texttt{MainWindow.axaml}).
@@ -167,6 +189,8 @@ Primer prikazuje Avalonia XAML kod jednostavnog prozora (tag \texttt{<Window>}) 
 Svaki element može da sadrži određene atribute, slično kao u XML-u. U primeru se vidi da tag \texttt{<Window>} sadrži Title atribut koji je zapravo tekst u title baru.
 
 U primeru je prikazano kako se uz pomoć FontWeight property može postaviti boldovan tekst sa sadržajem “A button”.
+
+\textbf{Napomena:} sledeći primeri sa \texttt{<Button>} su XAML fragmenti. Kopirajte ih u \texttt{MainWindow.axaml} unutar \texttt{<Window>...</Window>}, kao sadržaj prozora (npr. zamenite postojeće dugme).
 
 \begin{CodeBlock}
 <Button Content="A button" FontWeight="Bold" />
@@ -223,19 +247,41 @@ Isti rezultat se može postići na sledeći način. Ovaj način je jednostavniji
 
 \section{Code-behind}
 
+\subsection*{Mini-projekat: 02-events}
+\textbf{Kada:} pre nego što krenete sa sekcijama \textit{Code-behind} i \textit{Događaji}.
+
+\textbf{Kako (preporučeno):}
+
+\begin{CodeBlock}
+dotnet new avalonia.app -o 02-events -n GetStartedApp
+\end{CodeBlock}
+
+U Rider-u otvorite folder \texttt{02-events} (File/Open) i pokrenite aplikaciju.
+
+\textbf{Fajlovi koje menjate:} \texttt{MainWindow.axaml}, \texttt{MainWindow.axaml.cs}
+
 Osnovna odlika svake aplikacije je da implementira funkcionalnosti, uključujući obradu događaja (eng. handling events) kao što je korisnički klik. U Avalonia, ponašanje nakon okidanja događaja se može implementirati u kodu koji je povezan sa markup-om (XAML). Ovaj tip koda se naziva code-behind.
 
 Primer prikazuje XAML kod sa event handler-om, a zatim code-behind koji odgovara tom kodu.
 
 \begin{CodeBlock}
-<!-- MainWindow.axaml -->
-<Button Content="Klikni me" Click="Button_Click" />
+<!-- MainWindow.axaml (zamenite ceo fajl) -->
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="GetStartedApp.MainWindow"
+        Title="Events" Width="420" Height="220">
+  <StackPanel Margin="12" Spacing="8">
+    <Button Content="Klikni me" Click="Button_Click" />
+  </StackPanel>
+</Window>
 \end{CodeBlock}
 
 \begin{CodeBlock}
-// MainWindow.axaml.cs
+// MainWindow.axaml.cs (zamenite ceo fajl)
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+
+namespace GetStartedApp;
 
 public partial class MainWindow : Window
 {
@@ -256,6 +302,8 @@ InitializeComponent metoda se poziva iz code-behind-a, iz konstruktora klase. Ov
 \textbf{Napomena:} InitializeComponent se generiše za vas kada se kreira aplikacija i ne treba je implementirati ručno.
 
 \section{Događaji i obrada događaja (eng. Events and handling events)}
+
+\textbf{Napomena:} nastavljate u mini-projektu \texttt{02-events}.
 
 Većina UI framework-a su event driven. Sve kontrole, uključujući \texttt{Window} kontrolu, izlažu događaje na koje se može odreagovati. Možete se prijaviti (eng. subscribe) na ove događaje, što znači da će vaša aplikacija biti obaveštena kada se ovaj događaj desi i tada je moguće odreagovati na određeni način. Reakcija na događaj se zapravo definiše u event handler-u.
 
@@ -311,6 +359,19 @@ public MainWindow()
 \textbf{Napomena:} U praksi se handler-i najčešće dodaju kroz XAML ili kod; nije potrebno oslanjati se na poseban "Properties" panel.
 
 \section{Paneli (eng. Panels)}
+
+\subsection*{Mini-projekat: 03-layouts}
+\textbf{Kada:} pre nego što krenete sa ovom sekcijom.
+
+\textbf{Kako:}
+
+\begin{CodeBlock}
+dotnet new avalonia.app -o 03-layouts -n GetStartedApp
+\end{CodeBlock}
+
+\textbf{Fajl koji menjate:} \texttt{MainWindow.axaml}
+
+\textbf{Kako radite podprimere:} za svaki panel primer zamenite ceo \texttt{MainWindow.axaml} odgovarajućim listingom, pokrenite aplikaciju i posmatrajte raspored.
 
 Panel, kao jedna od najvažnijih kontrola, predstavlja kontejner za druge kontrole i upravlja sa rasporedom istih na prozoru. S obzirom da Window kontrola može da ima samo jednu child kontrolu, obično se koristi panel da podeli prostor na regije gde svaka regija može ponovo biti panel.
 
@@ -473,6 +534,23 @@ Primer XAML koda (Avalonia) za kombinaciju više panela (complex layout):
 \textbf{Očekivano:} gornji i donji tekst su dock-ovani, levo su dugmad, a ostatak prostora zauzima sadržaj.
 
 \section{Data binding}
+
+\subsection*{Mini-projekat: 04-binding}
+\textbf{Kada:} pre nego što krenete sa ovom sekcijom.
+
+\textbf{Kako:}
+
+\begin{CodeBlock}
+dotnet new avalonia.app -o 04-binding -n GetStartedApp
+\end{CodeBlock}
+
+\textbf{Fajlovi koje menjate:} \texttt{MainWindow.axaml}, \texttt{MainWindow.axaml.cs} + novi fajlovi iz ove sekcije.
+
+\textbf{Kako radite podprimere:}
+\begin{itemize}[leftmargin=*]
+  \item prvo dodajte \texttt{BindingDemoViewModel.cs} i ažurirajte \texttt{MainWindow.axaml.cs} (podsekcija "Priprema")
+  \item zatim u svakoj podsekciji zamenite \texttt{MainWindow.axaml} prikazanim XAML-om i pokrenite aplikaciju
+\end{itemize}
 
 Većina aplikacija omogućava korisniku da manipuliše sa nekim podacima. Kada su podaci učitani u aplikaciju (npr. iz neke baze podataka) potrebno ih je prikazati korisniku. Osim toga, korisniku se često omogućava da menja te podatke pa se mora voditi računa da bude tačno stanje podataka u bazi.
 
