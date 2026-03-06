@@ -166,17 +166,22 @@ Primer prikazuje Avalonia XAML kod jednostavnog prozora (tag \texttt{<Window>}) 
 </Window>
 \end{CodeBlock}
 
-\FigurePlaceholder{slika-7.png}{Slika 7. Jednostavan prozor sa jednim dugmetom (Avalonia XAML)}
-
 Svaki element može da sadrži određene atribute, slično kao u XML-u. U primeru se vidi da tag \texttt{<Window>} sadrži Title atribut koji je zapravo tekst u title baru.
 
 U primeru je prikazano kako se uz pomoć FontWeight property može postaviti boldovan tekst sa sadržajem “A button”.
 
-\FigurePlaceholder{slika-8.png}{Slika 8. Atributi dugmeta - inline}
+\begin{CodeBlock}
+<Button Content="A button" FontWeight="Bold" />
+\end{CodeBlock}
 
 Još jedan način definisanja atributa je prikazan. Ovaj način prikazuje atribute kao child tagove glavnog taga, a u ovom slučaju to je \texttt{<Button>}.
 
-\FigurePlaceholder{slika-9.png}{Slika 9. Atributi dugmeta - child komponente}
+\begin{CodeBlock}
+<Button>
+  <Button.Content>A button</Button.Content>
+  <Button.FontWeight>Bold</Button.FontWeight>
+</Button>
+\end{CodeBlock}
 
 S obzirom da je XAML XML-bazirani jezik, UI koji se kreira predstavlja hijerarhiju ugnježdenih elementa poznatih pod nazivom element tree.
 
@@ -184,13 +189,39 @@ Dat je primer gde je u okviru jednog dugmeta kreirano više tekst blokova korist
 
 Tekst u tekst blokovima je obojen različitim bojama koristeći atribut Foreground.
 
-\FigurePlaceholder{slika-10.png}{Slika 10. Složeni oblik dugmeta - prvi način}
+\begin{CodeBlock}
+<Button>
+  <Button.Content>
+    <WrapPanel>
+      <TextBlock Text="A" Foreground="Red" />
+      <TextBlock Text=" " />
+      <TextBlock Text="multi" Foreground="Green" />
+      <TextBlock Text=" " />
+      <TextBlock Text="color" Foreground="Blue" />
+      <TextBlock Text=" " />
+      <TextBlock Text="button" Foreground="DarkOrange" />
+    </WrapPanel>
+  </Button.Content>
+</Button>
+\end{CodeBlock}
 
 Content property dozvoljava samo jedan child element pa je bilo potrebno obuhvatiti child komeponente u WrapPanel. Paneli, kao što je WrapPanel, igraju veoma važnu ulogu u Avalonia i predstavljaju kontejnere za druge kontrole.
 
 Isti rezultat se može postići na sledeći način. Ovaj način je jednostavniji i češće je u upotrebi.
 
-\FigurePlaceholder{slika-11.png}{Slika 11. Složeni oblik dugmeta - drugi način}
+\begin{CodeBlock}
+<Button>
+  <WrapPanel>
+    <TextBlock Text="A" Foreground="Red" />
+    <TextBlock Text=" " />
+    <TextBlock Text="multi" Foreground="Green" />
+    <TextBlock Text=" " />
+    <TextBlock Text="color" Foreground="Blue" />
+    <TextBlock Text=" " />
+    <TextBlock Text="button" Foreground="DarkOrange" />
+  </WrapPanel>
+</Button>
+\end{CodeBlock}
 
 \section{Code-behind}
 \MigrationNote{Phase 2: section is updated for Avalonia. Example uses Avalonia event args and avoids \texttt{System.Windows.*}.}
@@ -222,9 +253,6 @@ public partial class MainWindow : Window
     }
 }
 \end{CodeBlock}
-
-\FigurePlaceholder{slika-12.png}{Slika 12. Proširen markup kod sa event handler-om}
-\FigurePlaceholder{slika-13.png}{Slika 13. Code behind sa event handler-om}
 
 InitializeComponent metoda se poziva iz code-behind-a, iz konstruktora klase. Ova metoda zadužena je da spoji (eng. merge) UI koji se definiše u markup kodu sa code-behind klasom.
 
@@ -320,7 +348,7 @@ Primer XAML koda (Avalonia) za WrapPanel:
 </Window>
 \end{CodeBlock}
 
-\FigurePlaceholder{slika-21.png}{Slika 21. PrimerVezbe3 – Izgled WrapPanel-a nakon pokretanja aplikacije}
+\textbf{Očekivano:} dugmad se ređaju levo--desno i "prelamaju" u novi red kada nema dovoljno širine.
 
 \subsection{Stack panel}
 StackPanel je veoma sličan Wrap panelu ali sa jednom važnom razlikom, ne wrap-uje sadržaj. Omogućava da se elementi ređaju jedan na drugi, u određenom smeru.
@@ -341,7 +369,8 @@ Primer XAML koda (Avalonia) za StackPanel:
   </StackPanel>
 </Window>
 \end{CodeBlock}
-\FigurePlaceholder{slika-23.png}{Slika 23. PrimerVezbe3 - Izgled StackPanel-a nakon pokretanja aplikacije}
+
+\textbf{Očekivano:} dugmad se ređaju u koloni (vertikalno) bez wrap-ovanja.
 
 Treba primetiti da je default ponašanje Stack panela da razvlači (eng. Stretch) svoje chid kontrole.
 
@@ -385,7 +414,7 @@ U XAML kodu možemo primetiti da je dodato 6 dugmića i da je za svaki definisan
 
 Osim toga, dodati su atributi koji određuju boju pozadine, kao i ColumnSpan i RowSpan.
 
-\FigurePlaceholder{slika-25.png}{Slika 25. PrimerVezbe3 - Izgled GridPanel-a nakon pokretanja aplikacije}
+\textbf{Očekivano:} kontrole se raspoređuju po redovima/kolonama, a span-ovi proširuju kontrolu preko više ćelija.
 
 \subsection{Dock panel}
 DockPanel olakšava raspoređivanje sadržaja u 4 smera (top, bottom, left, right). Predstavlja najbolji izbor kada je potrebno podeliti prozor u specifične sekcije, naročito zbog toga što poslednji element u DockPanelu, po default-u, zauzima preostali prostor (center). Na taj način se sav prostor u prozoru zauzima.
@@ -411,7 +440,7 @@ Primer XAML koda (Avalonia) za DockPanel:
 
 Dugmići u drugom panelu su raspoređeni u različitim smerovima a dugme ‘CETIRI’ osim toga zauzima i centralni deo jer je poslednji naveden.
 
-\FigurePlaceholder{slika-27.png}{Slika 27. PrimerVezbe3 - Izgled DockPanel-a nakon pokretanja aplikacije}
+\textbf{Očekivano:} poslednji element popunjava preostali prostor (center) ako je \texttt{LastChildFill=True}.
 
 \subsection{Primer kombinacije više panela – Complex Layout}
 U primeru je iskorišćen DockPanel da bi se prostor podelio na sekcije.
@@ -445,7 +474,8 @@ Primer XAML koda (Avalonia) za kombinaciju više panela (complex layout):
   </DockPanel>
 </Window>
 \end{CodeBlock}
-\FigurePlaceholder{slika-29.png}{Slika 29. PrimerVezbe3 - Izgled ComplexLayout-a nakon pokretanja aplikacije}
+
+\textbf{Očekivano:} gornji i donji tekst su dock-ovani, levo su dugmad, a ostatak prostora zauzima sadržaj.
 
 \section{Data binding}
 \MigrationNote{Phase 2: section is updated for Avalonia. Examples still use placeholders; they will be aligned to the new course project in a later step.}
@@ -458,126 +488,317 @@ Moguće je vršiti binding između dve kontrole kao i binding na resurs.
 
 Da bi se mogle detektovati promene na source-u (primenjivo na OneWay i TwoWay binding), source mora implementirati odgovarajući mehanizam notifikacije promena, kao što je \texttt{INotifyPropertyChanged}.
 
-Na primeru biće objašnjeni različiti načini upotrebe binding-a.
+Na primeru biće objašnjeni različiti načini upotrebe binding-a. U nastavku koristimo jednostavan ViewModel kao \texttt{DataContext}.
 
-\FigurePlaceholder{slika-30.png}{Slika 30. PrimerVezbe3 – Binding}
+\subsection{Priprema: DataContext (primer)}
+Napravite klasu \texttt{BindingDemoViewModel.cs} i postavite je kao \texttt{DataContext} u \texttt{MainWindow.axaml.cs}.
+
+\begin{CodeBlock}
+// BindingDemoViewModel.cs
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace GetStartedApp;
+
+public class BindingDemoViewModel : INotifyPropertyChanged
+{
+    private string _test1 = "Pocetna vrednost";
+    public string Test1
+    {
+        get => _test1;
+        set
+        {
+            if (_test1 == value) return;
+            _test1 = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private string _test2 = "Edituj me";
+    public string Test2
+    {
+        get => _test2;
+        set
+        {
+            if (_test2 == value) return;
+            _test2 = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private string _onlySource = "";
+    public string OnlySource
+    {
+        get => _onlySource;
+        set
+        {
+            if (_onlySource == value) return;
+            _onlySource = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private string _immediateText = "";
+    public string ImmediateText
+    {
+        get => _immediateText;
+        set
+        {
+            if (_immediateText == value) return;
+            _immediateText = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private string _lostFocusText = "";
+    public string LostFocusText
+    {
+        get => _lostFocusText;
+        set
+        {
+            if (_lostFocusText == value) return;
+            _lostFocusText = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public ObservableCollection<string> Test3 { get; } = new()
+    {
+        "Audi",
+        "BMW",
+        "Opel",
+    };
+
+    private string? _selectedTest3;
+    public string? SelectedTest3
+    {
+        get => _selectedTest3;
+        set
+        {
+            if (_selectedTest3 == value) return;
+            _selectedTest3 = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private int _itemCounter = 1;
+    public void AddItem() => Test3.Add($"Item {_itemCounter++}");
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+    private void OnPropertyChanged([CallerMemberName] string? propertyName = null) =>
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+}
+\end{CodeBlock}
+
+\begin{CodeBlock}
+// MainWindow.axaml.cs
+using Avalonia.Controls;
+
+namespace GetStartedApp;
+
+public partial class MainWindow : Window
+{
+    public BindingDemoViewModel ViewModel { get; } = new();
+
+    public MainWindow()
+    {
+        InitializeComponent();
+        DataContext = ViewModel;
+    }
+}
+\end{CodeBlock}
 
 \subsection{Binding na resurs – string (1)}
-Na slici je prikazano kako se može dodati resurs. U ovom slučaju, resursi su vezani za prozor tako da ih mogu koristiti sve kontrole iz tog prozora. Uz pomoć atributa x:Key se jedinstveno identifikuje i na taj način će mu se pristupati iz ostatka koda.
+Resursi se najčešće definišu u okviru \texttt{Window.Resources} bloka i koriste se preko \texttt{StaticResource}.
 
-\FigurePlaceholder{slika-31.png}{Slika 31. PrimerVezbe3 – Resursi zakačeni na Window tag}
+\begin{CodeBlock}
+<!-- MainWindow.axaml (primer) -->
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="GetStartedApp.MainWindow"
+        Title="Resources (string)" Width="520" Height="220">
+  <Window.Resources>
+    <x:String x:Key="strTestBinding">Hello from resource</x:String>
+  </Window.Resources>
 
-Ako želimo da TextBox kao svoj sadržaj ima tekst iz resursa, možemo to uraditi tako što ćemo Text property ove kontrole bindovati na resurs – string.
-
-Sa ključnom reči StaticResource označavamo da će se koristiti statički resurs a kao vrednost ResourceKey navodimo jedinstveni identifikator resursa kog želimo da koristimo.
-
-S obzirom da smo definisali vrednost x:Key kao “strTestBinding”, na ovaj način ćemo pozivati resurs.
-
-\FigurePlaceholder{slika-32.png}{Slika 32. PrimerVezbe3 – Binding na string}
+  <StackPanel Margin="12" Spacing="8">
+    <TextBox Text="{StaticResource strTestBinding}" />
+  </StackPanel>
+</Window>
+\end{CodeBlock}
 
 \subsection{Binding na resurs – boja (2)}
-Na slici možemo videti još jedan resurs. Ovaj resurs definisan je kao SolidColorBrush i koristiće se kao boja za selektovani tekst.
+Primer resursa koji se koristi kao brush (npr. boja selekcije teksta).
 
-Ovom resursu smo dodelili jedinstveni identifikator “clrSpecialColor”.
+\begin{CodeBlock}
+<!-- MainWindow.axaml (primer) -->
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="GetStartedApp.MainWindow"
+        Title="Resources (brush)" Width="520" Height="240">
+  <Window.Resources>
+    <SolidColorBrush x:Key="clrSpecialColor" Color="OrangeRed" />
+  </Window.Resources>
 
-TextBox nudi SelectionBrush i na ovom mestu možemo odrediti boju koja se koristi kada se selektuje tekst iz ovog TextBox-a. Tako je na ovom mestu odabran resurs i bindovan je na SelectionBrush.
-
-\FigurePlaceholder{slika-33.png}{Slika 33. PrimerVezbe3 – Binding na boju}
-\FigurePlaceholder{slika-34.png}{Slika 34. PrimerVezbe3 – Binding na boju - Rezultat selektovanja teksta}
+  <StackPanel Margin="12" Spacing="8">
+    <TextBox Text="Selektuj deo teksta" SelectionBrush="{StaticResource clrSpecialColor}" />
+  </StackPanel>
+</Window>
+\end{CodeBlock}
 
 \subsection{One way – ka interfejsu (7)}
-OneWay binding – promene na source property (model) automatski osvežavaju target property (UI kontrola) ali promene na target property (UI kontrola) ne emituju svoje promene na source property (model).
+OneWay binding – promene na source property automatski osvežavaju target property, ali izmene na kontroli ne menjaju source.
 
-Na kratko ćemo zanemariti UpdateSourceTrigger, objašnjenje sledi u nastavku.
+\begin{CodeBlock}
+<!-- unutar Window.Content -->
+<StackPanel Margin="12" Spacing="8">
+  <TextBlock Text="OneWay (Test1)" FontWeight="Bold" />
+  <TextBox Text="{Binding Test1, Mode=OneWay}" />
+  <Button Content="Promeni Test1 u kodu" Click="SetTest1_Click" />
+</StackPanel>
+\end{CodeBlock}
 
-\FigurePlaceholder{slika-35.png}{Slika 35. PrimerVezbe3 – One way binding}
+\begin{CodeBlock}
+// MainWindow.axaml.cs (dodati u klasu)
+using System;
+using Avalonia.Interactivity;
 
-U ovom primeru biće navedeno kako bindovati “Test1” na Text property TextBox kontrole. “Test1” se nalazi u klasi SimpleBinding.xaml.cs.
-
-Da bi mogli da izvršimo binding, property iz code-behind-a sa nekom kontrolom (u ovom slučaju TextBox) u XAML kodu, potrebno je da popunimo DataContext.
-
-DataContext property je default source za naš binding, osim ako se ne specificira drugačije.
-
-Ne postoji default source za DataContext property (on je null na početku), ali s obzirom da se DataContext nasleđuje dalje u hijerarhiji kontrola, često je dovoljno postaviti DataContext na ceo prozor i dalje koristiti za sve child kontrole.
-
-\FigurePlaceholder{slika-36.png}{Slika 36. PrimerVezbe3 – Code behind – Test1 property}
-
-Nakon poziva InitalizeComponent() metode, postavljamo "this" referencu kao DataContext, što u suštini govori Window komponenti da želimo da on sam bude Data context u bindingu.
-
-\FigurePlaceholder{slika-37.png}{Slika 37. PrimerVezbe3 – Code behind – Konstruktor}
-
-\textbf{Napomena:} Obratiti pažnju na način kako funkcioniše!
+private void SetTest1_Click(object? sender, RoutedEventArgs e)
+{
+    ViewModel.Test1 = $"Test1: {DateTime.Now:HH:mm:ss}";
+}
+\end{CodeBlock}
 
 \subsection{Two way – bidirekciono (6)}
-TwoWay binding – promene na source property (model) ili target property (UI kontrola) automatski osvežavaju promene na drugom. Ovaj tip binding-a odgovara npr. situaciji kada se koriste forme za editovanje podataka.
+TwoWay binding – promene na source ili target property osvežavaju drugu stranu. \texttt{TextBox.Text} je u Avalonia podrazumevano \texttt{TwoWay}.
 
-Na kratko ćemo zanemariti UpdateSourceTrigger, biće objašnjeno u nastavku.
-
-\textbf{Napomena:} Obratiti pažnju na način kako funkcioniše!
-
-\FigurePlaceholder{slika-38.png}{Slika 38. PrimerVezbe3 – Two way binding}
+\begin{CodeBlock}
+<!-- unutar Window.Content -->
+<StackPanel Margin="12" Spacing="8">
+  <TextBlock Text="TwoWay (Test2)" FontWeight="Bold" />
+  <TextBox Text="{Binding Test2}" />
+  <TextBlock Text="{Binding Test2, StringFormat='Trenutno: {0}'}" />
+</StackPanel>
+\end{CodeBlock}
 
 \subsection{One way to source – ka kodu (8)}
-OneWayToSource binding – suprotno od OneWay binding-a. Osvežava source property (model) kada dođe do promene na target property (UI element).
+OneWayToSource binding – promene na kontroli osvežavaju source, ali promene na source-u ne osvežavaju kontrolu.
 
-\textbf{Napomena:} Obratiti pažnju na način kako funkcioniše!
-
-\FigurePlaceholder{slika-39.png}{Slika 39. PrimerVezbe3 – One way to source binding}
+\begin{CodeBlock}
+<!-- unutar Window.Content -->
+<StackPanel Margin="12" Spacing="8">
+  <TextBlock Text="OneWayToSource (OnlySource)" FontWeight="Bold" />
+  <TextBox Watermark="Kucaj ovde" Text="{Binding OnlySource, Mode=OneWayToSource}" />
+  <TextBlock Text="{Binding OnlySource, StringFormat='Source: {0}'}" />
+</StackPanel>
+\end{CodeBlock}
 
 \subsection{Binding kontrole na kontrolu (3)}
-Osim binding-a na resurs ili na property iz code-behind-a, moguće je bindovati kontrolu na kontrolu. Ovaj proces podrazumeva da ponašanje jedne kontrole zavisi od ponašanja druge kontrole.
+Osim binding-a na \texttt{DataContext}, moguće je bindovati kontrolu direktno na kontrolu. U Avalonia možete koristiti \texttt{\#} sintaksu (named controls).
 
-U primeru se vidi kako vrednost TextBox kontrole zavisi od vrednosti Slider kontrole. Postiže se tako što Text property TextBox-a bindujemo na Value property Slider-a.
-
-Generička sintaksa za ovakav binding u Avalonia može biti:
-
-\begin{quote}
-\{Binding Value, ElementName=mySlider\}
-\end{quote}
-
-ili kraće, koristeći \texttt{\#} sintaksu za named kontrolu:
-
-\begin{quote}
-\{Binding \#mySlider.Value\}
-\end{quote}
-
-\FigurePlaceholder{slika-40.png}{Slika 40. PrimerVezbe3 – Binding kontrole na kontrolu}
-\FigurePlaceholder{slika-41.png}{Slika 41. PrimerVezbe3 – Binding kontrole na kontrolu – Prikaz nakon pokretanja aplikacije}
+\begin{CodeBlock}
+<!-- unutar Window.Content -->
+<StackPanel Margin="12" Spacing="8">
+  <TextBlock Text="Control-to-control binding" FontWeight="Bold" />
+  <Slider x:Name="mySlider" Minimum="0" Maximum="100" Value="25" />
+  <TextBlock Text="{Binding #mySlider.Value, StringFormat='Slider: {0:0}'}" />
+</StackPanel>
+\end{CodeBlock}
 
 \subsection{Binding kontrole na kontrolu - real time (4)}
-Binding kao što su TwoWay ili OneWayToSource osluškuju promene na target property (UI element) i propagiraju do source (model) i ovo je poznato kao “updating the source”. Npr. kada se edituje polje (TextBox) treba promeniti source vrednost.
+\texttt{UpdateSourceTrigger} određuje kada će se promena sa kontrole preneti na source. U Avalonia, \texttt{TextBox.Text} se podrazumevano sinhronizuje na svako kucanje (\texttt{PropertyChanged}).
 
-\texttt{UpdateSourceTrigger} određuje kada će se promena sa kontrole preneti na source. U Avalonia, \texttt{TextBox.Text} se podrazumevano sinhronizuje na svako kucanje (\texttt{PropertyChanged}). Ako želite da se source ažurira tek kada kontrola izgubi fokus, koristite \texttt{UpdateSourceTrigger=LostFocus}.
+\begin{CodeBlock}
+<!-- unutar Window.Content -->
+<StackPanel Margin="12" Spacing="8">
+  <TextBlock Text="UpdateSourceTrigger" FontWeight="Bold" />
 
-\FigurePlaceholder{slika-42.png}{Slika 42. PrimerVezbe3 - Real time binding kontrole na kontrolu}
-\FigurePlaceholder{slika-43.png}{Slika 43. PrimerVezbe3 - Real time binding kontrole na kontrolu - Prikaz nakon pokretanja aplikacije}
+  <TextBox Watermark="PropertyChanged (default)" Text="{Binding ImmediateText}" />
+  <TextBlock Text="{Binding ImmediateText, StringFormat='Immediate: {0}'}" />
+
+  <TextBox Watermark="LostFocus" Text="{Binding LostFocusText, UpdateSourceTrigger=LostFocus}" />
+  <TextBlock Text="{Binding LostFocusText, StringFormat='LostFocus: {0}'}" />
+</StackPanel>
+\end{CodeBlock}
 
 \subsection{Binding kontrole na kontrolu - real time + konverzija (5)}
-Ako se u procesu binding-a želi iskoristiti konverzija, to se može lako uvesti uz pomoć Converter atributa. Dovoljno je navesti koji konverter će se koristiti. Da bi se kreirao konverter dovoljno je implementirati interface i implementirati telo Convert i ConvertBack metode.
+Ako se u procesu binding-a želi iskoristiti konverzija, koristite \texttt{Converter}. U Avalonia se kreira implementacijom \texttt{IValueConverter}.
 
-\FigurePlaceholder{slika-44.png}{Slika 44. PrimerVezbe3 - Real time binding kontrole na kontrolu i konverzija}
-\FigurePlaceholder{slika-45.png}{Slika 45. PrimerVezbe3 - Real time binding kontrole na kontrolu i konverzija - Prikaz nakon pokretanja aplikacije}
-\FigurePlaceholder{slika-46.png}{Slika 46. PrimerVezbe3 – Konverter klasa}
+\begin{CodeBlock}
+// MultiplyConverter.cs
+using System;
+using System.Globalization;
+using Avalonia.Data.Converters;
 
-\textbf{Napomena:} Obavezno pogledati primer u kodu!
+namespace GetStartedApp;
+
+public class MultiplyConverter : IValueConverter
+{
+    public double Factor { get; set; } = 1;
+
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is double d)
+            return (d * Factor).ToString("0.##", culture);
+        return value?.ToString();
+    }
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is string s && double.TryParse(s, NumberStyles.Any, culture, out var d))
+            return d / Factor;
+        return value;
+    }
+}
+\end{CodeBlock}
+
+\begin{CodeBlock}
+<!-- MainWindow.axaml (primer) -->
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="using:GetStartedApp"
+        x:Class="GetStartedApp.MainWindow"
+        Title="Converter" Width="520" Height="260">
+  <Window.Resources>
+    <local:MultiplyConverter x:Key="Mul2" Factor="2" />
+  </Window.Resources>
+
+  <StackPanel Margin="12" Spacing="8">
+    <Slider x:Name="convSlider" Minimum="0" Maximum="50" Value="10" />
+    <TextBlock Text="{Binding #convSlider.Value, StringFormat='Original: {0:0}'}" />
+    <TextBlock Text="{Binding #convSlider.Value, Converter={StaticResource Mul2}, StringFormat='x2: {0}'}" />
+  </StackPanel>
+</Window>
+\end{CodeBlock}
 
 \subsection{Binding na listu (9)}
-U ovom primeru biće navedeno kako bindovati ComboBox vrednosti na vrednosti neke liste.
+Primer binding-a \texttt{ComboBox} kontrole na kolekciju (\texttt{ObservableCollection}).
 
-‘Test3’ predstavlja ObservableCollection u klasi SimpleBinding i sadržaće niz string vrednosti koje želimo prikazati u ComboBox kontroli.
+\begin{CodeBlock}
+<!-- unutar Window.Content -->
+<StackPanel Margin="12" Spacing="8">
+  <TextBlock Text="Binding na listu (Test3)" FontWeight="Bold" />
 
-Da bi mogli da povežemo ovu kolekciju iz SimpleBinding klase (code-behind) sa nekom kontrolom u XAML kodu, potrebno je da popunimo DataContext.
+  <ComboBox ItemsSource="{Binding Test3}"
+            SelectedItem="{Binding SelectedTest3}"
+            Width="200" />
 
-Upotreba DataContext objašnjena je u primeru sa One-way binding-om.
+  <TextBlock Text="{Binding SelectedTest3, StringFormat='Selektovano: {0}'}" />
 
-\textbf{Napomena:} Obavezno pogledati primer u kodu!
+  <Button Content="Dodaj element" Click="AddItem_Click" Width="200" />
+</StackPanel>
+\end{CodeBlock}
 
-\FigurePlaceholder{slika-47.png}{Slika 47. PrimerVezbe3 – Binding na listu vrednosti}
-\FigurePlaceholder{slika-48.png}{Slika 48. PrimerVezbe3 – Code behind – Kolekcija}
+\begin{CodeBlock}
+// MainWindow.axaml.cs (dodati u klasu)
+using Avalonia.Interactivity;
 
-Klikom na dugme poziva se metoda u kojoj se vrši dodavanje elemenata u kolekciju.
-
-\textbf{Napomena:} Obavezno pogledati da li će se promena manifestovati na ComboBox!
+private void AddItem_Click(object? sender, RoutedEventArgs e)
+{
+    ViewModel.AddItem();
+}
+\end{CodeBlock}
 
 \section*{DODATAK}
 \MigrationNote{Rewrite appendix to Avalonia control list and links.}
