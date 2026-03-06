@@ -14,6 +14,7 @@
 \usepackage{xcolor}
 \usepackage{enumitem}
 \usepackage{titlesec}
+\usepackage{fvextra}
 
 \geometry{margin=2.2cm}
 \hypersetup{
@@ -39,6 +40,8 @@
     \caption{#2}
   \end{figure}
 }
+
+\DefineVerbatimEnvironment{CodeBlock}{Verbatim}{breaklines=true,breakanywhere=true,fontsize=\small}
 
 \begin{document}
 \maketitle
@@ -70,23 +73,23 @@ Avalonia sadrži set application-development alata (eng. features): XAML, kontro
 \textbf{Preduslovi:}
 
 \begin{itemize}[leftmargin=*]
-  \item .NET SDK (8.0 ili noviji)
+  \item .NET SDK (10.0 LTS)
   \item JetBrains Rider
   \item (Opcionalno) Rider plugin \textit{AvaloniaRider} za live XAML preview
 \end{itemize}
 
 \textbf{Instalacija Avalonia templates:}
 
-\begin{verbatim}
+\begin{CodeBlock}
 dotnet new list
 dotnet new install Avalonia.Templates
-\end{verbatim}
+\end{CodeBlock}
 
 \textbf{Kreiranje projekta u Rider-u:}
 
 \begin{enumerate}[leftmargin=*]
   \item Na početnom ekranu izaberite \textbf{New Solution}.
-  \item U sekciji \textbf{Custom Templates} izaberite \textbf{Avalonia .NET MVVM App} (preporučeno).
+  \item U sekciji \textbf{Custom Templates} izaberite \textbf{Avalonia .NET App}.
   \item Unesite ime rešenja/projekta i lokaciju.
   \item Kliknite \textbf{Create}.
 \end{enumerate}
@@ -95,13 +98,13 @@ dotnet new install Avalonia.Templates
 
 \textbf{Alternativa (command line):}
 
-\begin{verbatim}
-dotnet new avalonia.mvvm -o GetStartedApp
-\end{verbatim}
+\begin{CodeBlock}
+dotnet new avalonia.app -o GetStartedApp
+\end{CodeBlock}
 
 \textbf{Pokretanje projekta:}
 
-U Rider-u kliknite \textbf{Run}. Alternativno, u terminalu pokrenite \texttt{dotnet run} iz desktop projekta (npr. \texttt{*.Desktop}).
+U Rider-u kliknite \textbf{Run}. Alternativno, u terminalu pokrenite \texttt{dotnet run} u folderu projekta.
 
 \FigurePlaceholder{slika-2.png}{Slika 2. Pokretanje Avalonia aplikacije (podrazumevani ekran)}
 
@@ -154,14 +157,14 @@ U Avalonia projektima XAML fajlovi obično imaju ekstenziju \texttt{.axaml} (npr
 
 Primer prikazuje Avalonia XAML kod jednostavnog prozora (tag \texttt{<Window>}) koji sadrži samo jedno dugme (tag \texttt{<Button>}).
 
-\begin{verbatim}
+\begin{CodeBlock}
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        x:Class="GetStartedApp.Views.MainWindow"
+        x:Class="GetStartedApp.MainWindow"
         Title="MainWindow" Width="800" Height="450">
   <Button Content="Click me" />
 </Window>
-\end{verbatim}
+\end{CodeBlock}
 
 \FigurePlaceholder{slika-7.png}{Slika 7. Jednostavan prozor sa jednim dugmetom (Avalonia XAML)}
 
@@ -196,12 +199,12 @@ Osnovna odlika svake aplikacije je da implementira funkcionalnosti, uključujuć
 
 Primer prikazuje XAML kod sa event handler-om, a zatim code-behind koji odgovara tom kodu.
 
-\begin{verbatim}
+\begin{CodeBlock}
 <!-- MainWindow.axaml -->
 <Button Content="Klikni me" Click="Button_Click" />
-\end{verbatim}
+\end{CodeBlock}
 
-\begin{verbatim}
+\begin{CodeBlock}
 // MainWindow.axaml.cs
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -218,7 +221,7 @@ public partial class MainWindow : Window
         Title = "Kliknuto!";
     }
 }
-\end{verbatim}
+\end{CodeBlock}
 
 \FigurePlaceholder{slika-12.png}{Slika 12. Proširen markup kod sa event handler-om}
 \FigurePlaceholder{slika-13.png}{Slika 13. Code behind sa event handler-om}
@@ -240,12 +243,12 @@ Postoji više tipova događaja ali oni koji se najčešće koriste su vezani za 
 
 U XAML-u dodajte handler kao atribut kontrole (npr. dugmeta). Ako metoda ne postoji, Rider obično nudi quick-fix (\textbf{Alt+Enter}) da se kreira metoda u odgovarajućem code-behind fajlu.
 
-\begin{verbatim}
+\begin{CodeBlock}
 <!-- MainWindow.axaml -->
 <Button Content="Klik" Click="Button_Click" />
-\end{verbatim}
+\end{CodeBlock}
 
-\begin{verbatim}
+\begin{CodeBlock}
 // MainWindow.axaml.cs
 using Avalonia.Interactivity;
 
@@ -253,7 +256,7 @@ private void Button_Click(object? sender, RoutedEventArgs e)
 {
     // reakcija na klik
 }
-\end{verbatim}
+\end{CodeBlock}
 
 \FigurePlaceholder{slika-14.png}{Slika 14. Dodavanje događaja kao XAML atribut (Rider)}
 
@@ -261,12 +264,12 @@ private void Button_Click(object? sender, RoutedEventArgs e)
 
 Drugi način je da se pretplatite na događaj u konstruktoru (posle \texttt{InitializeComponent()}). U tom slučaju najčešće je potrebno pronaći kontrolu po imenu (\texttt{Name} / \texttt{x:Name}).
 
-\begin{verbatim}
+\begin{CodeBlock}
 // MainWindow.axaml
 <Button x:Name="MyButton" Content="Klik" />
-\end{verbatim}
+\end{CodeBlock}
 
-\begin{verbatim}
+\begin{CodeBlock}
 // MainWindow.axaml.cs
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -277,7 +280,7 @@ public MainWindow()
     var button = this.FindControl<Button>("MyButton");
     button.Click += Button_Click;
 }
-\end{verbatim}
+\end{CodeBlock}
 
 \FigurePlaceholder{slika-15.png}{Slika 15. Pretplata na događaj u code-behind-u (Rider)}
 
@@ -297,16 +300,47 @@ WrapPanel treba koristiti kada imamo listu kontrola koje želimo da rasporedimo 
 
 Kada WrapPanel koristi horizontalnu orijentaciju, child kontrole će imati istu visinu, zasnovanu na visini najvišeg elementa. Kada je WrapPanel vertikalno orijentisan, child kontrole će imati istu širinu kao najširi element.
 
-\FigurePlaceholder{slika-20.png}{Slika 20. PrimerVezbe3 - WrapPanel}
+Primer XAML koda (Avalonia) za WrapPanel:
 
-Na slici je dat primer rasporeda elemenata u okviru Wrap panela.
+\begin{CodeBlock}
+<!-- MainWindow.axaml -->
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="GetStartedApp.MainWindow"
+        Title="WrapPanel primer" Width="520" Height="260">
+  <WrapPanel Margin="12">
+    <Button Content="JEDAN" Width="120" Height="40" Margin="6" />
+    <Button Content="DVA" Width="120" Height="40" Margin="6" />
+    <Button Content="TRI" Width="120" Height="40" Margin="6" />
+    <Button Content="CETIRI" Width="120" Height="40" Margin="6" />
+    <Button Content="PET" Width="120" Height="40" Margin="6" />
+    <Button Content="SEST" Width="120" Height="40" Margin="6" />
+    <Button Content="SEDAM" Width="120" Height="40" Margin="6" />
+  </WrapPanel>
+</Window>
+\end{CodeBlock}
 
 \FigurePlaceholder{slika-21.png}{Slika 21. PrimerVezbe3 – Izgled WrapPanel-a nakon pokretanja aplikacije}
 
 \subsection{Stack panel}
 StackPanel je veoma sličan Wrap panelu ali sa jednom važnom razlikom, ne wrap-uje sadržaj. Omogućava da se elementi ređaju jedan na drugi, u određenom smeru.
 
-\FigurePlaceholder{slika-22.png}{Slika 22. PrimerVezbe3 – StackPanel}
+Primer XAML koda (Avalonia) za StackPanel:
+
+\begin{CodeBlock}
+<!-- MainWindow.axaml -->
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="GetStartedApp.MainWindow"
+        Title="StackPanel primer" Width="420" Height="260">
+  <StackPanel Margin="12" Spacing="8">
+    <Button Content="JEDAN" Height="36" />
+    <Button Content="DVA" Height="36" />
+    <Button Content="TRI" Height="36" HorizontalAlignment="Left" Width="160" />
+    <Button Content="CETIRI" Height="36" />
+  </StackPanel>
+</Window>
+\end{CodeBlock}
 \FigurePlaceholder{slika-23.png}{Slika 23. PrimerVezbe3 - Izgled StackPanel-a nakon pokretanja aplikacije}
 
 Treba primetiti da je default ponašanje Stack panela da razvlači (eng. Stretch) svoje chid kontrole.
@@ -326,7 +360,26 @@ Kako smo odredili koliko će Grid imati redova, možemo da odredimo i koliko kol
 
 Default vrednost za širinu je GridLength i predstavlja "1*" veličinu.
 
-\FigurePlaceholder{slika-24.png}{Slika 24. PrimerVezbe3 - GridPanel}
+Primer XAML koda (Avalonia) za Grid:
+
+\begin{CodeBlock}
+<!-- MainWindow.axaml -->
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="GetStartedApp.MainWindow"
+        Title="Grid primer" Width="520" Height="320">
+  <Grid Margin="12" RowDefinitions="Auto,Auto,*" ColumnDefinitions="Auto,Auto,*">
+    <Button Content="JEDAN" Grid.Row="0" Grid.Column="0" Background="LightSalmon" Margin="4" />
+    <Button Content="DVA" Grid.Row="0" Grid.Column="1" Background="LightSkyBlue" Margin="4" />
+    <Button Content="TRI" Grid.Row="0" Grid.Column="2" Background="LightGreen" Margin="4" />
+
+    <Button Content="CETIRI" Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Background="Khaki" Margin="4" />
+    <Button Content="PET" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Background="Plum" Margin="4" />
+
+    <Button Content="SEST" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Background="Gainsboro" Margin="4" />
+  </Grid>
+</Window>
+\end{CodeBlock}
 
 U XAML kodu možemo primetiti da je dodato 6 dugmića i da je za svaki definisano u kojoj koloni i redu se nalazi. Ovakvo ponašanje omogućavaju Grid.Column i Grid.Row atributi.
 
@@ -339,7 +392,22 @@ DockPanel olakšava raspoređivanje sadržaja u 4 smera (top, bottom, left, righ
 
 DockPanel.Dock property omogućava da odredimo smer gde će kontrola biti postavljena.
 
-\FigurePlaceholder{slika-26.png}{Slika 26. PrimerVezbe3 – DockPanel}
+Primer XAML koda (Avalonia) za DockPanel:
+
+\begin{CodeBlock}
+<!-- MainWindow.axaml -->
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="GetStartedApp.MainWindow"
+        Title="DockPanel primer" Width="520" Height="320">
+  <DockPanel Margin="12" LastChildFill="True">
+    <Button Content="JEDAN" DockPanel.Dock="Top" Height="40" Margin="4" />
+    <Button Content="DVA" DockPanel.Dock="Left" Width="120" Margin="4" />
+    <Button Content="TRI" DockPanel.Dock="Bottom" Height="40" Margin="4" />
+    <Button Content="CETIRI" Margin="4" />
+  </DockPanel>
+</Window>
+\end{CodeBlock}
 
 Dugmići u drugom panelu su raspoređeni u različitim smerovima a dugme ‘CETIRI’ osim toga zauzima i centralni deo jer je poslednji naveden.
 
@@ -354,7 +422,29 @@ Ostatak prostora popunjen je sa novim DockPanelom u okviru kog je kreiran StackP
 
 Ovim primerom pokazano je kako se kompozicijom više panela može napraviti željeni raspored komponenti.
 
-\FigurePlaceholder{slika-28.png}{Slika 28. PrimerVezbe3 - ComplexLayout}
+Primer XAML koda (Avalonia) za kombinaciju više panela (complex layout):
+
+\begin{CodeBlock}
+<!-- MainWindow.axaml -->
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="GetStartedApp.MainWindow"
+        Title="Complex layout" Width="720" Height="420">
+  <DockPanel>
+    <TextBlock DockPanel.Dock="Top" Text="Gornji tekst" Margin="12" FontSize="18" />
+    <TextBlock DockPanel.Dock="Bottom" Text="Donji tekst" Margin="12" />
+
+    <DockPanel Margin="12">
+      <StackPanel DockPanel.Dock="Left" Spacing="8" Margin="0,0,12,0">
+        <Button Content="DUGME 1" Height="36" Width="160" Margin="0,0,0,8" />
+        <Button Content="DUGME 2" Height="36" Width="160" Margin="0" />
+      </StackPanel>
+
+      <TextBlock Text="Sadržaj" VerticalAlignment="Center" />
+    </DockPanel>
+  </DockPanel>
+</Window>
+\end{CodeBlock}
 \FigurePlaceholder{slika-29.png}{Slika 29. PrimerVezbe3 - Izgled ComplexLayout-a nakon pokretanja aplikacije}
 
 \section{Data binding}
