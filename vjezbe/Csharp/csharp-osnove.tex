@@ -1,0 +1,162 @@
+% !TeX program = xelatex
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{fontspec}
+\setmainfont{Libertinus Serif}
+\usepackage{polyglossia}
+\setdefaultlanguage{serbian}
+\setotherlanguage{english}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{bookmark}
+\usepackage{microtype}
+\usepackage{parskip}
+\usepackage{fvextra}
+\usepackage{float}
+\usepackage{caption}
+
+\geometry{margin=2.2cm}
+\setlength{\emergencystretch}{3em}
+\setlist{leftmargin=*}
+\urlstyle{same}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  urlcolor=blue!50!black,
+  pdfcreator={LaTeX via pandoc}
+}
+\providecommand{\tightlist}{%%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\DefineVerbatimEnvironment{CodeBlock}{Verbatim}{breaklines=true,breakanywhere=true,fontsize=\small}
+
+\begin{document}
+\section{C\# - основе}
+
+Уз овај документ ћеш проћи кроз основе \emph{C\#} програмског језика као
+и његову употребу унутар \emph{Visual Studio Code}-а. У учионицама у
+којима се одржавају вјежбе имате двије опције за израду данашњих
+задатака: једна је да користите виртуелну машину и радите унутар
+\emph{Visual Studio}-а окружења, а друга је да користите \emph{Visual
+Studio Code} који је доступан изван виртуелне машине. Топла је препорука
+да користите онај доступан унутар виртуелне машине, као и да на својим
+персоналним рачунарима не користите \emph{VS Code}, већ неко од
+интегрисаних окружења за развој (IDE-a):
+\href{https://visualstudio.microsoft.com/}{\emph{Visual Studio}} и
+\href{https://www.jetbrains.com/rider/}{\emph{JetBrains Rider}} су
+најпознатији (за оба алата можеш добити професионалне лиценце на основу
+факултетског имејла).
+
+Уколико ћеш радити у \emph{Code}-у ће ти требати одговарајући
+\emph{plugin} за \emph{C\#}. Препорука је да у фолдеру \emph{Documents}
+направиш фолдер са својим именом и индексом и све задатке смјестиш у
+њега. Исте налоге користе сви студенти, па је ово препоручен начин за
+рад да не изгубиш задатке од претходног пута. За сваки од задатака у
+наставку направи нови фолдер унутар твог фолдера и у том фолдеру направи
+нову апликацију у којој ћеш ријешити задатак.
+
+Уколико ћеш радити у \emph{Visual Studio}-у, немаш никаквих предуслова.
+
+За сваки задатак направи нови пројекат/нову апликацију. За оне који желе
+да науче више:
+\href{https://learn.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-2015/ide/adding-and-removing-project-items?view=vs-2015}{погледајте}
+како да унутар једне апликације имате више пројеката.
+
+\section{Развој конзолних
+апликација}
+
+За израду задатака који слиједе може ти значити
+\href{https://www.codecademy.com/learn/learn-c-sharp/modules/csharp-hello-world/cheatsheet}{овај}
+и
+\href{https://begincodingnow.com/wp-content/uploads/2019/02/CSharpCheatSheetV1.pdf}{овај}
+(мало старија верзија) документ, као и званичну
+\href{https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/}{документацију}.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Пратећи упутство са
+  \href{https://learn.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-2015/ide/creating-solutions-and-projects?view=vs-2015\#create-a-project-from-an-installed-project-template}{VS}/
+  \href{https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio-code?pivots=dotnet-6-0\#create-the-app}{VS
+  Code}, направи своју прву конзолну апликацију (енгл. \emph{Console
+  Application}). Уколико радите у \emph{Code}-у, обратите пажњу на тачку
+  7 из упутства и користите ту синтаксу.
+\item
+  Направи још једну конзолну апликацију која учитава природан број
+  \emph{n} и као резултат испише \emph{n}-ти члан Фибоначијевог низа.
+\item
+  Прочитај документ о
+  \href{https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions}{препорученим
+  конвенција}ма. Анализирај колико си испоштовао конвенције у претходна
+  два задатка. Рефакториши претходне задатке тако да испоштујеш
+  конвенције и труди се да их се придржавате убудуће.
+\item
+  Направи конзолну апликацију која учитава стринг и провјерава да ли је
+  стринг палиндром.
+\item
+  Направи конзолну апликацију која учитава стринг произвољне дужине и
+  серијализује га у текстуални фајл.
+\end{enumerate}
+
+\subsection{Класе}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{5}
+\item
+  Направи нову конзолну апликацију у којој ћеш вјежбати рад са класама.
+  Направи нову класу аутомобил која има поља: модел, марка, боја, година
+  производње, врсту горива и мотор. Врста горива је енумерација (дизел и
+  бензин). Мотор је такође класа са идућим пољима: назив, кубикажа,
+  снага.
+\item
+  Направи пар објеката класа мотор и аутомобил. За обје класе направи
+  \emph{ToString} методу и испиши објекте на конзолу.
+\end{enumerate}
+
+\subsection{Инсталација и коришћење
+пакета}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{7}
+\item
+  Пратећи упутство са
+  \href{https://learn.microsoft.com/en-us/nuget/consume-packages/install-use-packages-visual-studio}{VS}/\href{https://docs.microsoft.com/en-us/nuget/quickstart/install-and-use-a-package-using-the-dotnet-cli}{VS
+  Code}, инсталирај \emph{Newtonsoft.Json} пакет и тестирајте га на
+  примјеру.
+\item
+  Вратите се на пројекат који си користио за вјежбање рада са класама. У
+  новој функцији учитај \emph{cars.json} фајл (налази се на канвасу у
+  фолдеру вјежбе/термин 1) користећи \emph{Newtonsoft.Json} пакет
+  (користи ово подешавање приликом учитавања new JsonSerializerSettings
+  \{ PreserveReferencesHandling = PreserveReferencesHandling.Objects \},
+  а у документацији пакета пронађи како да га искористиш). На конзолу
+  испиши:
+
+  \begin{enumerate}
+  \def\labelenumii{\alph{enumii}.}
+  \item
+    Старост сваког аутомобила
+  \item
+    Називе аутомобила који су највише 5 година стари
+  \item
+    Просјечну старост
+  \end{enumerate}
+\item
+  Из листе аутомобила издвоји све јединствене моторе и серијализуј их у
+  фајл под називом \emph{engines.json}.
+\item
+  У новој конзолној апликацији направи класу производ и учитај
+  \emph{items.json}. Испиши све производе коjима рок трајања није
+  истекао, па испиши оне којима истиче у року од 7 дана.
+\item
+  Производе из претходног задатка пребаци у ријечник тако да су кључеви
+  шифре производа, а вриједности су сами производи. Користећи ријечник
+  израчунај колико ће корисника коштати куповина два производа са шифром
+  1, једног производа са шифром 3 и четири производа са шифром 4.
+\end{enumerate}
+
+\end{document}
