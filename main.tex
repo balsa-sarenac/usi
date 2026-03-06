@@ -38,17 +38,10 @@
 \begin{document}
 \maketitle
 
-\section*{Rešenje (Solution) i projekat (Project)}
-\textbf{Projekat} je jedna aplikacija ili biblioteka koja se kompajlira. U .NET svetu projekat je definisan fajlom \texttt{*.csproj}. U njemu se nalaze: target framework, reference na NuGet pakete, reference na druge projekte, opcije build-a, itd.
-
-\textbf{Rešenje} je kontejner koji organizuje više projekata u jednu celinu. Tipično je definisano fajlom \texttt{*.sln}. Rešenje ne sadrži kod koji se izvršava; služi za organizaciju u IDE-u (npr. jedan solution može sadržati više projekata: aplikacija + biblioteka + testovi).
-
-\textbf{Važno:} možete pokretati projekat i bez \texttt{*.sln} fajla. Komande kao što su \texttt{dotnet build} i \texttt{dotnet run} rade nad \texttt{*.csproj} (ili nad folderom koji ga sadrži).
-
-U ovom materijalu svaki mini-projekat je jedan zaseban folder sa jednim Avalonia projektom. Rider može da otvori folder projekta direktno (File/Open), i u tom slučaju će napraviti interni "solution model" bez potrebe da ručno kreirate \texttt{*.sln}.
-
 \section*{Kako koristiti materijal}
-Materijal je organizovan kao mini-projekti (po temi). Za svaku temu napravite novi projekat (Avalonia .NET App), pa onda copy/paste kod iz odgovarajuće sekcije.
+Materijal je organizovan kao mini-aplikacije (po temi). Za svaku temu napravite novi Avalonia projekat u posebnom folderu i zatim copy/paste kod iz odgovarajuće sekcije.
+
+\textbf{Ne pravimo zajednički solution.} Svaki folder je zaseban projekat koji otvarate direktno u Rider-u (File/Open).
 
 \textbf{Preporuka:} koristite isto ime projekta (\texttt{GetStartedApp}) u svim mini-projektima, da ne biste menjali \texttt{x:Class} i namespace u snippeti-ma.
 
@@ -97,7 +90,7 @@ dotnet new install Avalonia.Templates
 \textbf{Kreiranje projekta u Rider-u:}
 
 \begin{enumerate}[leftmargin=*]
-  \item Na početnom ekranu izaberite \textbf{New Solution}.
+  \item Na početnom ekranu izaberite \textbf{New Solution} (Rider-ov naziv za kreiranje novog projekta/aplikacije).
   \item U sekciji \textbf{Custom Templates} izaberite \textbf{Avalonia .NET App}.
   \item Unesite ime rešenja/projekta i lokaciju.
   \item Kliknite \textbf{Create}.
@@ -159,9 +152,7 @@ Ako koristite XAML preview, obično je dostupan kao kartica \textbf{Preview} por
 \section{Markup (XAML)}
 
 \subsection*{Mini-projekat: 01-xaml}
-\textbf{Kada:} pre nego što krenete sa ovom sekcijom.
-
-\textbf{Kako (preporučeno):} kreirajte projekat iz terminala, pa otvorite folder u Rider-u.
+Pre nego što krenete sa ovom sekcijom preporučeno je da kreirate projekat iz terminala, pa otvorite folder u Rider-u.
 
 \begin{CodeBlock}
 dotnet new avalonia.app -o 01-xaml -n GetStartedApp
@@ -248,9 +239,7 @@ Isti rezultat se može postići na sledeći način. Ovaj način je jednostavniji
 \section{Code-behind}
 
 \subsection*{Mini-projekat: 02-events}
-\textbf{Kada:} pre nego što krenete sa sekcijama \textit{Code-behind} i \textit{Događaji}.
-
-\textbf{Kako (preporučeno):}
+Pre nego što krenete sa sekcijama \textit{Code-behind} i \textit{Događaji} napraviti novi projekat:
 
 \begin{CodeBlock}
 dotnet new avalonia.app -o 02-events -n GetStartedApp
@@ -361,9 +350,7 @@ public MainWindow()
 \section{Paneli (eng. Panels)}
 
 \subsection*{Mini-projekat: 03-layouts}
-\textbf{Kada:} pre nego što krenete sa ovom sekcijom.
-
-\textbf{Kako:}
+Napravite novi projekat:
 
 \begin{CodeBlock}
 dotnet new avalonia.app -o 03-layouts -n GetStartedApp
@@ -536,9 +523,7 @@ Primer XAML koda (Avalonia) za kombinaciju više panela (complex layout):
 \section{Data binding}
 
 \subsection*{Mini-projekat: 04-binding}
-\textbf{Kada:} pre nego što krenete sa ovom sekcijom.
-
-\textbf{Kako:}
+Napravite novi projekat:
 
 \begin{CodeBlock}
 dotnet new avalonia.app -o 04-binding -n GetStartedApp
