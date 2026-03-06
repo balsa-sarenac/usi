@@ -1,7 +1,5 @@
 % !TeX program = pdflatex
-% Migration to Avalonia + Rider (cross-platform).
-% Phase 1: extracted structure/text from the original WPF PDF into LaTeX.
-% Phase 2: started rewriting tooling sections (Rider + Avalonia templates).
+% Avalonia UI + Rider (cross-platform) - teaching material.
 
 \documentclass[11pt,a4paper]{article}
 
@@ -27,12 +25,6 @@
 \author{Fakultet tehničkih nauka\\Univerzitet u Novom Sadu}
 \date{}
 
-\newcommand{\MigrationNote}[1]{%
-  \begin{quote}
-    \color{black!75}\textbf{Migration note:} #1
-  \end{quote}
-}
-
 \newcommand{\FigurePlaceholder}[2]{%
   \begin{figure}[h]
     \centering
@@ -46,20 +38,29 @@
 \begin{document}
 \maketitle
 
-\section*{Migration Status}
-\MigrationNote{This document started as a WPF PDF extraction (Phase 1). Tooling sections are now being rewritten for Avalonia + Rider (Phase 2). Figures are placeholders and will be replaced with Rider screenshots.}
+\section*{Kako koristiti materijal}
+Materijal je organizovan kao mini-projekti (po temi). Za svaku temu napravite novi projekat (Avalonia .NET App), pa onda copy/paste kod iz odgovarajuće sekcije.
 
-\begin{itemize}[leftmargin=*,nosep]
-  \item \textbf{Done:} LaTeX scaffold + preserved original structure/text.
-  \item \textbf{In progress:} Rider + Avalonia project creation/workflow sections.
-  \item \textbf{Next:} convert WPF-specific APIs/examples to Avalonia equivalents; update screenshots; update docs links.
+\textbf{Preporuka:} koristite isto ime projekta (\texttt{GetStartedApp}) u svim mini-projektima, da ne biste menjali \texttt{x:Class} i namespace u snippeti-ma.
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{01-xaml} -- osnove XAML-a i kontrole
+  \item \textbf{02-events} -- događaji i event handler-i
+  \item \textbf{03-layouts} -- paneli i raspored
+  \item \textbf{04-binding} -- data binding, resursi, konverzija
 \end{itemize}
+
+\textbf{Kreiranje mini-projekta (CLI primer):}
+
+\begin{CodeBlock}
+dotnet new install Avalonia.Templates
+dotnet new avalonia.app -o 03-layouts -n GetStartedApp
+\end{CodeBlock}
 
 \tableofcontents
 \newpage
 
 \section{Uvod u Avalonia}
-\MigrationNote{Phase 2: section is updated for Avalonia + Rider. Remaining sections still reflect WPF and will be migrated in later phases.}
 
 Avalonia UI je cross-platform GUI (Graphical User Interface) framework za kreiranje desktop aplikacija na Windows-u, Linux-u i macOS-u.
 
@@ -68,7 +69,6 @@ GUI framework omogućava da kreiramo aplikacije uz pomoć velikog opsega GUI ele
 Avalonia sadrži set application-development alata (eng. features): XAML, kontrole, data binding, layouts, 2D grafika, animacije, stilovi, media i slično.
 
 \subsection{Kreiranje Avalonia projekta (Rider)}
-\MigrationNote{Phase 2: instructions are Rider-first with a CLI fallback, to be OS-agnostic.}
 
 \textbf{Preduslovi:}
 
@@ -99,7 +99,7 @@ dotnet new install Avalonia.Templates
 \textbf{Alternativa (command line):}
 
 \begin{CodeBlock}
-dotnet new avalonia.app -o GetStartedApp
+dotnet new avalonia.app -o 01-xaml -n GetStartedApp
 \end{CodeBlock}
 
 \textbf{Pokretanje projekta:}
@@ -109,7 +109,6 @@ U Rider-u kliknite \textbf{Run}. Alternativno, u terminalu pokrenite \texttt{dot
 \FigurePlaceholder{slika-2.png}{Slika 2. Pokretanje Avalonia aplikacije (podrazumevani ekran)}
 
 \subsection{Markup i code-behind}
-\MigrationNote{Phase 2: section is updated for Avalonia + Rider. Screenshots are placeholders and will be re-captured.}
 
 Avalonia omogućava da se razvija aplikacija koristeći markup i code-behind.
 
@@ -132,7 +131,7 @@ Na slici je prikazan prazan Avalonia projekat otvoren u Rider-u. Tipični segmen
   \item \textbf{Code-behind} fajl (npr. \texttt{MainWindow.axaml.cs}).
 \end{enumerate}
 
-Za razliku od tipičnog WPF+Visual Studio workflow-a, u Rider-u se kontrole najčešće dodaju pisanjem XAML-a uz code completion i snippet-e, a ne prevlačenjem iz Toolbox-a.
+Za razliku od workflow-a sa drag\&drop dizajnerom, u Rider-u se kontrole najčešće dodaju pisanjem XAML-a uz code completion i snippet-e.
 
 \FigurePlaceholder{slika-3.png}{Slika 3. Rider okruženje: Solution, XAML editor i (opciono) XAML preview}
 
@@ -149,7 +148,6 @@ Ako koristite XAML preview, obično je dostupan kao kartica \textbf{Preview} por
 \FigurePlaceholder{slika-6.png}{Slika 6. XAML preview u Rider-u (opciono)}
 
 \section{Markup (XAML)}
-\MigrationNote{Phase 2: section is updated for Avalonia. Examples use \texttt{.axaml} and Avalonia XAML namespaces.}
 
 XAML je XML-bazirani markup jezik koji omogućava implementiranje izgleda aplikacije (eng. application's appearance). Koristi se za kreiranje prozora, jednostavnih dijaloga i kontrola a navedeno dalje možemo popunjavati sa novim kontrolama, oblicima i grafičkim elementima.
 
@@ -224,7 +222,6 @@ Isti rezultat se može postići na sledeći način. Ovaj način je jednostavniji
 \end{CodeBlock}
 
 \section{Code-behind}
-\MigrationNote{Phase 2: section is updated for Avalonia. Example uses Avalonia event args and avoids \texttt{System.Windows.*}.}
 
 Osnovna odlika svake aplikacije je da implementira funkcionalnosti, uključujući obradu događaja (eng. handling events) kao što je korisnički klik. U Avalonia, ponašanje nakon okidanja događaja se može implementirati u kodu koji je povezan sa markup-om (XAML). Ovaj tip koda se naziva code-behind.
 
@@ -259,7 +256,6 @@ InitializeComponent metoda se poziva iz code-behind-a, iz konstruktora klase. Ov
 \textbf{Napomena:} InitializeComponent se generiše za vas kada se kreira aplikacija i ne treba je implementirati ručno.
 
 \section{Događaji i obrada događaja (eng. Events and handling events)}
-\MigrationNote{Phase 2: section is updated for Avalonia + Rider. Replaces Visual Studio Properties/Designer workflow with XAML-first editing.}
 
 Većina UI framework-a su event driven. Sve kontrole, uključujući \texttt{Window} kontrolu, izlažu događaje na koje se može odreagovati. Možete se prijaviti (eng. subscribe) na ove događaje, što znači da će vaša aplikacija biti obaveštena kada se ovaj događaj desi i tada je moguće odreagovati na određeni način. Reakcija na događaj se zapravo definiše u event handler-u.
 
@@ -312,10 +308,9 @@ public MainWindow()
 
 \FigurePlaceholder{slika-15.png}{Slika 15. Pretplata na događaj u code-behind-u (Rider)}
 
-\textbf{Napomena:} Avalonia nema WPF-ov "Properties" panel za događaje na isti način kao Visual Studio designer; u praksi se handler-i dodaju kroz XAML ili kod.
+\textbf{Napomena:} U praksi se handler-i najčešće dodaju kroz XAML ili kod; nije potrebno oslanjati se na poseban "Properties" panel.
 
 \section{Paneli (eng. Panels)}
-\MigrationNote{Phase 2: panels section is largely identical between WPF and Avalonia; text is kept with minor wording updates.}
 
 Panel, kao jedna od najvažnijih kontrola, predstavlja kontejner za druge kontrole i upravlja sa rasporedom istih na prozoru. S obzirom da Window kontrola može da ima samo jednu child kontrolu, obično se koristi panel da podeli prostor na regije gde svaka regija može ponovo biti panel.
 
@@ -478,7 +473,6 @@ Primer XAML koda (Avalonia) za kombinaciju više panela (complex layout):
 \textbf{Očekivano:} gornji i donji tekst su dock-ovani, levo su dugmad, a ostatak prostora zauzima sadržaj.
 
 \section{Data binding}
-\MigrationNote{Phase 2: section is updated for Avalonia. Examples still use placeholders; they will be aligned to the new course project in a later step.}
 
 Većina aplikacija omogućava korisniku da manipuliše sa nekim podacima. Kada su podaci učitani u aplikaciju (npr. iz neke baze podataka) potrebno ih je prikazati korisniku. Osim toga, korisniku se često omogućava da menja te podatke pa se mora voditi računa da bude tačno stanje podataka u bazi.
 
@@ -801,7 +795,6 @@ private void AddItem_Click(object? sender, RoutedEventArgs e)
 \end{CodeBlock}
 
 \section*{DODATAK}
-\MigrationNote{Rewrite appendix to Avalonia control list and links.}
 
 Kontrole (Avalonia reference):
 

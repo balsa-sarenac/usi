@@ -9,3 +9,6 @@
 *.synctex.gz
 *.fls
 *.fdb_latexmk
+
+# Local coordination notes (do not commit)
+TODO_KOLEGE.md
