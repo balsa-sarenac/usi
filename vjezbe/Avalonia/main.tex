@@ -14,6 +14,8 @@
 \usepackage{titlesec}
 \usepackage{fvextra}
 \usepackage{float}
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
 
 \geometry{margin=2.2cm}
 \hypersetup{
@@ -34,6 +36,15 @@
   \end{figure}
 }
 \DefineVerbatimEnvironment{CodeBlock}{Verbatim}{breaklines=true,breakanywhere=true,fontsize=\small}
+
+\tcolorboxenvironment{CodeBlock}{
+  breakable,             
+  colback=black!4,      
+  colframe=black!20,     
+  boxrule=0.5pt,         
+  arc=3pt,               
+  left=2mm, right=2mm, top=2mm, bottom=2mm 
+}
 
 \begin{document}
 \maketitle
@@ -397,10 +408,21 @@ Primer XAML koda (Avalonia) za WrapPanel:
 </Window>
 \end{CodeBlock}
 
+\FigurePlaceholder{rezultat-4.png}{Rezultat 4. Horizontalni raspored elemenata u WrapPanel panelu}
+
+
 \textbf{Očekivano:} dugmad se ređaju levo--desno i "prelamaju" u novi red kada nema dovoljno širine.
 
 \subsection{Stack panel}
-StackPanel je veoma sličan Wrap panelu ali sa jednom važnom razlikom, ne wrap-uje sadržaj. Omogućava da se elementi ređaju jedan na drugi, u određenom smeru.
+StackPanel raspoređuje svoje child kontrole jednu za drugom, u jednom smeru. 
+Podrazumevana orijentacija je vertikalna, što znači da se elementi ređaju odozgo nadole.
+
+Za razliku od WrapPanel-a, StackPanel ne prelama sadržaj u novi red ili kolonu. 
+Elementi se jednostavno slažu redom, u skladu sa zadatom orijentacijom.
+
+U sledećem primeru koristi se vertikalni \texttt{StackPanel} koji sadrži više 
+pravougaonika različitih visina. Na ovaj način se jasno vidi kako StackPanel 
+raspoređuje elemente jedan ispod drugog.
 
 Primer XAML koda (Avalonia) za StackPanel:
 
@@ -410,33 +432,64 @@ Primer XAML koda (Avalonia) za StackPanel:
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="GetStartedApp.MainWindow"
         Title="StackPanel primer" Width="420" Height="260">
-  <StackPanel Margin="12" Spacing="8">
-    <Button Content="JEDAN" Height="36" />
-    <Button Content="DVA" Height="36" />
-    <Button Content="TRI" Height="36" HorizontalAlignment="Left" Width="160" />
-    <Button Content="CETIRI" Height="36" />
+  <StackPanel Width="200">
+    <Rectangle Fill="Red" Height="50"/>
+    <Rectangle Fill="Blue" Height="50"/>
+    <Rectangle Fill="Green" Height="100"/>
+    <Rectangle Fill="Orange" Height="50"/>
   </StackPanel>
 </Window>
 \end{CodeBlock}
 
-\textbf{Očekivano:} dugmad se ređaju u koloni (vertikalno) bez wrap-ovanja.
+\FigurePlaceholder{rezultat-5.png}{Rezultat 5. Vertikalni raspored elemenata u StackPanel panelu}
 
-Treba primetiti da je default ponašanje Stack panela da razvlači (eng. Stretch) svoje chid kontrole.
+U ovom primeru svi pravougaonici imaju istu širinu, dok im je visina definisana 
+pojedinačno. Pošto je orijentacija StackPanel-a vertikalna, elementi se raspoređuju 
+jedan ispod drugog, bez prelamanja sadržaja.
 
-StackPanel koji ima vertikalnu orijentaciju, sve svoje child kontrole rasteže horizontalno. Kada je u pitanju StackPanel sa horizontalnom orijentacijom, sve child kontrole se rastežu vertikalno.
-
-StackPanel omogućava to zato što su HorizontalAlignment ili VerticalAlignment property na njegovim child kontrolama postavljeni na Stretch. Ovo ponašanje se može promeniti.
-
-Takođe treba uočiti da je default orijentacija za StackPanel Vertical, za razliku od WrapPanel kod kog je Horizontal.
-
+\textbf{Očekivano:} pravougaonici se prikazuju u jednoj koloni, odozgo nadole, 
+pri čemu svaki element zadržava svoju zadatu visinu.
 \subsection{Grid panel}
-Grid može da sadrži više redova i kolona. Moguće je definisati visinu za svaki od redova ili širinu za svaku kolonu. Visina ili širina se mogu definisati na više načina, kao broj piksela, procentima u zavisnosti od slobodnog prostora ili da se vrednost prilagodi veličini sadržaja.
+Grid panel predstavlja jedan od najmoćnijih layout panela u Avalonia framework-u. Omogućava raspoređivanje kontrola u mreži koja se sastoji od redova i kolona.
 
-Uz pomoć RowDefinition atributa odredili smo da će Grid panel imati 3 reda. Za prva dva reda visina je postavljena na Auto.
+Kontrole unutar Grid-a pozicioniraju se pomoću atributa \texttt{Grid.Row} i \texttt{Grid.Column}, koji određuju u kom redu i koloni će se kontrola nalaziti. Pored toga, kontrola se može proširiti preko više redova pomoću atributa \texttt{Grid.RowSpan}.
 
-Kako smo odredili koliko će Grid imati redova, možemo da odredimo i koliko kolona želimo u Grid-u. Ovo ćemo uraditi uz pomoć ColumnDefinition atributa. Za prve dve kolone širina je postavljena na Auto dok je za treću uzeta default vrednost.
+Redovi i kolone mogu se definisati na dva načina:
 
-Default vrednost za širinu je GridLength i predstavlja "1*" veličinu.
+\begin{itemize}[leftmargin=*]
+  \item \textbf{dužom sintaksom}, pomoću \texttt{<Grid.RowDefinitions>} i \texttt{<Grid.ColumnDefinitions>} blokova
+  \item \textbf{skraćenom sintaksom}, navođenjem vrednosti direktno u atributima \texttt{RowDefinitions} i \texttt{ColumnDefinitions}
+\end{itemize}
+
+Veličine redova i kolona mogu biti zadate na više načina:
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{fiksnom vrednošću} (npr. \texttt{100}) -- širina ili visina izražena u pikselima
+  \item \textbf{Auto} -- veličina se prilagođava sadržaju
+  \item \textbf{zvezdica (\texttt{*})} -- preostali prostor se deli proporcionalno
+\end{itemize}
+
+Na primer, definicija \texttt{100,1.5*,4*} znači da prva kolona ima fiksnu širinu od 100 piksela, a da se preostali prostor deli između druge i treće kolone u odnosu 1.5:4.
+
+\textbf{Duža sintaksa} je korisna kada želimo eksplicitno da prikažemo strukturu Grid-a:
+
+\begin{CodeBlock}
+<Grid Margin="4">
+  <Grid.RowDefinitions>
+    <RowDefinition Height="Auto"/>
+    <RowDefinition Height="Auto"/>
+    <RowDefinition Height="Auto"/>
+  </Grid.RowDefinitions>
+
+  <Grid.ColumnDefinitions>
+    <ColumnDefinition Width="100"/>
+    <ColumnDefinition Width="1.5*"/>
+    <ColumnDefinition Width="4*"/>
+  </Grid.ColumnDefinitions>
+</Grid>
+\end{CodeBlock}
+
+U praksi se u Avalonia često koristi \textbf{skraćena sintaksa}, jer je kraća i preglednija.
 
 Primer XAML koda (Avalonia) za Grid:
 
@@ -445,30 +498,56 @@ Primer XAML koda (Avalonia) za Grid:
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="GetStartedApp.MainWindow"
-        Title="Grid primer" Width="520" Height="320">
-  <Grid Margin="12" RowDefinitions="Auto,Auto,*" ColumnDefinitions="Auto,Auto,*">
-    <Button Content="JEDAN" Grid.Row="0" Grid.Column="0" Background="LightSalmon" Margin="4" />
-    <Button Content="DVA" Grid.Row="0" Grid.Column="1" Background="LightSkyBlue" Margin="4" />
-    <Button Content="TRI" Grid.Row="0" Grid.Column="2" Background="LightGreen" Margin="4" />
+        Title="Grid primer"
+        Width="520"
+        Height="220">
+  <Grid ColumnDefinitions="100,1.5*,4*"
+        RowDefinitions="Auto,Auto,Auto"
+        Margin="4">
+    <TextBlock Text="Col0Row0:" Grid.Row="0" Grid.Column="0"/>
+    <TextBlock Text="Col0Row1:" Grid.Row="1" Grid.Column="0"/>
+    <TextBlock Text="Col0Row2:" Grid.Row="2" Grid.Column="0"/>
 
-    <Button Content="CETIRI" Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Background="Khaki" Margin="4" />
-    <Button Content="PET" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Background="Plum" Margin="4" />
+    <CheckBox Content="Col2Row0"
+              Grid.Row="0"
+              Grid.Column="2"/>
 
-    <Button Content="SEST" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Background="Gainsboro" Margin="4" />
+    <Button Content="SpansCol1-2Row1-2"
+            Grid.Row="1"
+            Grid.Column="1"
+            Grid.RowSpan="2"/>
   </Grid>
 </Window>
 \end{CodeBlock}
 
-U XAML kodu možemo primetiti da je dodato 6 dugmića i da je za svaki definisano u kojoj koloni i redu se nalazi. Ovakvo ponašanje omogućavaju Grid.Column i Grid.Row atributi.
+U ovom primeru Grid ima tri reda i tri kolone. Prva kolona ima fiksnu širinu od 100 piksela, dok druga i treća kolona proporcionalno dele preostali prostor.
 
-Osim toga, dodati su atributi koji određuju boju pozadine, kao i ColumnSpan i RowSpan.
+Tekstualne kontrole su postavljene u prvu kolonu, a \texttt{CheckBox} je smešten u prvi red treće kolone. Dugme koristi atribut \texttt{Grid.RowSpan}, pa zauzima više redova -- počevši od ćelije u redu 1 i koloni 1, šireći se jedan red nadole.
 
-\textbf{Očekivano:} kontrole se raspoređuju po redovima/kolonama, a span-ovi proširuju kontrolu preko više ćelija.
+\FigurePlaceholder{rezultat-6.png}{Rezultat 6. Raspored kontrola u Grid panelu uz korišćenje redova, kolona i atributa \texttt{Grid.RowSpan}}
 
+\textbf{Očekivano:} kontrole se raspoređuju u mrežu definisanu redovima i kolonama, dok dugme zauzima veći prostor po visini jer se prostire preko dva reda.
 \subsection{Dock panel}
-DockPanel olakšava raspoređivanje sadržaja u 4 smera (top, bottom, left, right). Predstavlja najbolji izbor kada je potrebno podeliti prozor u specifične sekcije, naročito zbog toga što poslednji element u DockPanelu, po default-u, zauzima preostali prostor (center). Na taj način se sav prostor u prozoru zauzima.
 
-DockPanel.Dock property omogućava da odredimo smer gde će kontrola biti postavljena.
+DockPanel je layout panel koji raspoređuje svoje child kontrole uz ivice kontejnera. Svaka kontrola može biti "prikačena" (eng. docked) uz jednu od sledećih ivica:
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Top} -- gornja ivica
+  \item \textbf{Bottom} -- donja ivica
+  \item \textbf{Left} -- leva ivica
+  \item \textbf{Right} -- desna ivica
+\end{itemize}
+
+Pozicija kontrole određuje se pomoću atributa \texttt{DockPanel.Dock}. Kontrole se raspoređuju redosledom kojim su definisane u XAML kodu. Kada se postavi nova kontrola, DockPanel uzima u obzir prostor koji su već zauzele prethodne kontrole, pa se elementi nikada ne preklapaju.
+
+Važna karakteristika DockPanel-a je da \textbf{poslednja kontrola popunjava sav preostali prostor}. Zbog toga je potrebno da poslednji element nema definisan \texttt{DockPanel.Dock} atribut.
+
+Kada je kontrola dock-ovana uz određenu ivicu, potrebno je definisati dimenziju koja je \textbf{normalna (perpendicular)} na tu ivicu. Na primer:
+
+\begin{itemize}[leftmargin=*]
+  \item kontrola dock-ovana uz \texttt{Top} ili \texttt{Bottom} treba da ima definisanu \texttt{Height}
+  \item kontrola dock-ovana uz \texttt{Left} ili \texttt{Right} treba da ima definisanu \texttt{Width}
+\end{itemize}
 
 Primer XAML koda (Avalonia) za DockPanel:
 
@@ -477,54 +556,141 @@ Primer XAML koda (Avalonia) za DockPanel:
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="GetStartedApp.MainWindow"
-        Title="DockPanel primer" Width="520" Height="320">
-  <DockPanel Margin="12" LastChildFill="True">
-    <Button Content="JEDAN" DockPanel.Dock="Top" Height="40" Margin="4" />
-    <Button Content="DVA" DockPanel.Dock="Left" Width="120" Margin="4" />
-    <Button Content="TRI" DockPanel.Dock="Bottom" Height="40" Margin="4" />
-    <Button Content="CETIRI" Margin="4" />
+        Title="DockPanel primer">
+
+  <DockPanel Width="300" Height="300">
+
+    <Rectangle Fill="Red"
+               Height="100"
+               DockPanel.Dock="Top"/>
+
+    <Rectangle Fill="Blue"
+               Width="100"
+               DockPanel.Dock="Left"/>
+
+    <Rectangle Fill="Green"
+               Height="100"
+               DockPanel.Dock="Bottom"/>
+
+    <Rectangle Fill="Orange"
+               Width="100"
+               DockPanel.Dock="Right"
+               Opacity="0.5"/>
+
+    <Rectangle Fill="Gray"/>
+
   </DockPanel>
+
 </Window>
 \end{CodeBlock}
 
-Dugmići u drugom panelu su raspoređeni u različitim smerovima a dugme ‘CETIRI’ osim toga zauzima i centralni deo jer je poslednji naveden.
+\FigurePlaceholder{rezultat-7.png}{Rezultat 7. Raspored elemenata u DockPanel panelu}
 
-\textbf{Očekivano:} poslednji element popunjava preostali prostor (center) ako je \texttt{LastChildFill=True}.
+U ovom primeru:
+
+\begin{itemize}[leftmargin=*]
+  \item crveni pravougaonik je dock-ovan uz gornju ivicu
+  \item plavi pravougaonik je dock-ovan uz levu ivicu
+  \item zeleni pravougaonik je dock-ovan uz donju ivicu
+  \item narandžasti pravougaonik je dock-ovan uz desnu ivicu
+\end{itemize}
+
+Poslednji element (sivi pravougaonik) nema definisan \texttt{DockPanel.Dock} atribut i zato automatski popunjava sav preostali prostor u panelu.
+
+Narandžasti pravougaonik ima postavljen atribut \texttt{Opacity="0.5"} kako bi se lakše videlo da se elementi ne preklapaju.
+
+\textbf{Očekivano:} kontrole se raspoređuju uz ivice DockPanel-a, dok poslednja kontrola popunjava preostali centralni prostor.
 
 \subsection{Primer kombinacije više panela – Complex Layout}
-U primeru je iskorišćen DockPanel da bi se prostor podelio na sekcije.
 
-Na vrhu (DockPanel.Dock = “Top”) postavljen je jedan TextBlock. Ista stvar urađena je i na dnu prozora.
+U realnim aplikacijama korisnički interfejs se retko sastoji od jednog panela. 
+Najčešće je potrebno kombinovati više različitih layout panela kako bi se dobio 
+pregledan raspored elemenata u prozoru.
 
-Ostatak prostora popunjen je sa novim DockPanelom u okviru kog je kreiran StackPanel i dodat jedan TextBlock. StackPanel u sebi objedinjuje dva dugmeta a svaki od njih određen je atributima kao što su Height, Width i Margin.
+U sledećem primeru koristi se \texttt{DockPanel} kao osnovni panel koji deli 
+prozor na nekoliko glavnih sekcija:
 
-Ovim primerom pokazano je kako se kompozicijom više panela može napraviti željeni raspored komponenti.
+\begin{itemize}[leftmargin=*]
+  \item zaglavlje na vrhu prozora
+  \item statusna traka na dnu
+  \item bočni meni sa leve strane
+  \item centralni deo za prikaz sadržaja
+\end{itemize}
 
-Primer XAML koda (Avalonia) za kombinaciju više panela (complex layout):
+Unutar bočnog menija i centralnog dela koristi se \texttt{StackPanel} za 
+vertikalno raspoređivanje kontrola. Na taj način se različiti paneli 
+kombinuju kako bi se dobio složeniji raspored elemenata u interfejsu.
+
+Primer XAML koda (Avalonia) za kombinaciju više panela:
 
 \begin{CodeBlock}
 <!-- MainWindow.axaml -->
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="GetStartedApp.MainWindow"
-        Title="Complex layout" Width="720" Height="420">
+        Title="Complex layout primer"
+        Width="760"
+        Height="420">
+
   <DockPanel>
-    <TextBlock DockPanel.Dock="Top" Text="Gornji tekst" Margin="12" FontSize="18" />
-    <TextBlock DockPanel.Dock="Bottom" Text="Donji tekst" Margin="12" />
 
-    <DockPanel Margin="12">
-      <StackPanel DockPanel.Dock="Left" Spacing="8" Margin="0,0,12,0">
-        <Button Content="DUGME 1" Height="36" Width="160" Margin="0,0,0,8" />
-        <Button Content="DUGME 2" Height="36" Width="160" Margin="0" />
+    <Border DockPanel.Dock="Top" Background="PaleVioletRed" Padding="12">
+      <TextBlock Text="Uvod u Avalonia Layout-e"
+                 FontSize="20"
+                 FontWeight="Bold"/>
+    </Border>
+
+    <Border DockPanel.Dock="Bottom" Background="PaleVioletRed" Padding="10">
+      <TextBlock Text="Status: aplikacija je pokrenuta"/>
+    </Border>
+
+    <StackPanel DockPanel.Dock="Left"
+                Width="180"
+                Spacing="8"
+                Margin="12">
+      <Button Content="Početna" Height="36"/>
+      <Button Content="Paneli" Height="36"/>
+      <Button Content="Binding" Height="36"/>
+    </StackPanel>
+
+    <Border Margin="12"
+            Padding="16"
+            Background="DeepSkyBlue">
+      <StackPanel Spacing="10">
+        <TextBlock Text="Glavni sadržaj"
+                   FontSize="18"
+                   FontWeight="Bold"/>
+
+        <TextBlock Text="Ovaj primer prikazuje kombinaciju više layout panela u jednom prozoru."
+                   TextWrapping="Wrap"/>
+
+        <TextBlock Text="DockPanel raspoređuje zaglavlje, bočni meni i statusnu traku, dok se StackPanel koristi za grupisanje dugmadi i sadržaja."
+                   TextWrapping="Wrap"/>
+
+        <Button Content="Akcija"
+                Width="120"
+                HorizontalAlignment="Left"/>
       </StackPanel>
+    </Border>
 
-      <TextBlock Text="Sadržaj" VerticalAlignment="Center" />
-    </DockPanel>
   </DockPanel>
 </Window>
 \end{CodeBlock}
 
-\textbf{Očekivano:} gornji i donji tekst su dock-ovani, levo su dugmad, a ostatak prostora zauzima sadržaj.
+\FigurePlaceholder{rezultat-8.png}{Rezultat 8. Primer kombinacije više layout panela u jednom prozoru}
+
+U ovom primeru:
+
+\begin{itemize}[leftmargin=*]
+  \item \texttt{DockPanel} raspoređuje glavne sekcije prozora
+  \item zaglavlje i statusna traka su dock-ovani uz gornju i donju ivicu
+  \item \texttt{StackPanel} na levoj strani predstavlja jednostavan meni
+  \item centralni deo prikazuje sadržaj aplikacije
+\end{itemize}
+
+\textbf{Očekivano:} zaglavlje se prikazuje na vrhu prozora, statusna traka na dnu, 
+meni sa leve strane, dok centralni deo popunjava preostali prostor i prikazuje 
+glavni sadržaj aplikacije.
 
 \section{Data binding}
 

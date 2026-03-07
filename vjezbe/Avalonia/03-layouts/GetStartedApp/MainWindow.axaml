@@ -1,0 +1,89 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="GetStartedApp.MainWindow"
+        Title="03 - Layout panels"
+        Width="900"
+        Height="520">
+
+    <DockPanel>
+
+        <!-- Header -->
+        <Border DockPanel.Dock="Top"
+                Background="PaleVioletRed"
+                Padding="12">
+            <TextBlock Text="Primer kombinovanja layout panela"
+                       FontSize="20"
+                       FontWeight="Bold"/>
+        </Border>
+
+        <!-- Footer -->
+        <Border DockPanel.Dock="Bottom"
+                Background="PaleVioletRed"
+                Padding="10">
+            <TextBlock Text="Status: primer rasporeda elemenata"/>
+        </Border>
+
+        <!-- Left menu -->
+        <StackPanel DockPanel.Dock="Left"
+                    Width="180"
+                    Spacing="8"
+                    Margin="12">
+            <Button Content="Početna" Height="36"/>
+            <Button Content="Paneli" Height="36"/>
+            <Button Content="Binding" Height="36"/>
+            <Button Content="Podešavanja" Height="36"/>
+        </StackPanel>
+
+        <!-- Main content -->
+        <Border Margin="12"
+                Padding="16"
+                Background="DeepSkyBlue">
+            <StackPanel Spacing="16">
+
+                <TextBlock Text="Glavni sadržaj"
+                           FontSize="18"
+                           FontWeight="Bold"/>
+
+                <TextBlock Text="U ovom delu su prikazana dva različita panela unutar centralnog sadržaja."
+                           TextWrapping="Wrap"/>
+
+                <!-- WrapPanel example -->
+                <StackPanel Spacing="8">
+                    <TextBlock Text="WrapPanel primer"
+                               FontWeight="Bold"/>
+                    <WrapPanel>
+                        <Button Content="Tag 1" Width="90" Margin="4"/>
+                        <Button Content="Tag 2" Width="90" Margin="4"/>
+                        <Button Content="Tag 3" Width="90" Margin="4"/>
+                        <Button Content="Tag 4" Width="90" Margin="4"/>
+                        <Button Content="Tag 5" Width="90" Margin="4"/>
+                    </WrapPanel>
+                </StackPanel>
+
+                <!-- Grid example -->
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Grid primer"
+                               FontWeight="Bold"/>
+
+                    <Grid ColumnDefinitions="120,*"
+                          RowDefinitions="Auto,Auto,Auto"
+                          Margin="0,4,0,0">
+                        <TextBlock Text="Ime:" Grid.Row="0" Grid.Column="0" Margin="4"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Margin="4"/>
+
+                        <TextBlock Text="Prezime:" Grid.Row="1" Grid.Column="0" Margin="4"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Margin="4"/>
+
+                        <TextBlock Text="Email:" Grid.Row="2" Grid.Column="0" Margin="4"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Margin="4"/>
+                    </Grid>
+                </StackPanel>
+
+                <Button Content="Sačuvaj"
+                        Width="120"
+                        HorizontalAlignment="Left"/>
+            </StackPanel>
+        </Border>
+
+    </DockPanel>
+</Window>
