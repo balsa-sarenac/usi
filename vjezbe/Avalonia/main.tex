@@ -13,6 +13,7 @@
 \usepackage{enumitem}
 \usepackage{titlesec}
 \usepackage{fvextra}
+\usepackage{float}
 
 \geometry{margin=2.2cm}
 \hypersetup{
@@ -26,13 +27,12 @@
 \date{}
 
 \newcommand{\FigurePlaceholder}[2]{%
-  \begin{figure}[h]
+  \begin{figure}[H]
     \centering
-    \fbox{\parbox{0.92\linewidth}{\vspace{18mm}\centering\textit{Placeholder for figure file}\\\texttt{assets/#1}\\\vspace{18mm}}}
+    \includegraphics[width=0.92\linewidth,height=0.75\textheight,keepaspectratio]{assets/#1}
     \caption{#2}
   \end{figure}
 }
-
 \DefineVerbatimEnvironment{CodeBlock}{Verbatim}{breaklines=true,breakanywhere=true,fontsize=\small}
 
 \begin{document}
@@ -177,6 +177,8 @@ Primer prikazuje Avalonia XAML kod jednostavnog prozora (tag \texttt{<Window>}) 
 </Window>
 \end{CodeBlock}
 
+\FigurePlaceholder{rezultat-1.png}{Rezultat 1: Jednostavan Avalonia prozor sa jednim dugmetom}
+
 Svaki element može da sadrži određene atribute, slično kao u XML-u. U primeru se vidi da tag \texttt{<Window>} sadrži Title atribut koji je zapravo tekst u title baru.
 
 U primeru je prikazano kako se uz pomoć FontWeight property može postaviti boldovan tekst sa sadržajem “A button”.
@@ -195,6 +197,8 @@ Još jedan način definisanja atributa je prikazan. Ovaj način prikazuje atribu
   <Button.FontWeight>Bold</Button.FontWeight>
 </Button>
 \end{CodeBlock}
+
+\FigurePlaceholder{rezultat-2.png}{Rezultat 2: Dugme sa boldovanim tekstom (isti vizuelni rezultat za oba prikazana načina pisanja)}
 
 S obzirom da je XAML XML-bazirani jezik, UI koji se kreira predstavlja hijerarhiju ugnježdenih elementa poznatih pod nazivom element tree.
 
@@ -235,6 +239,8 @@ Isti rezultat se može postići na sledeći način. Ovaj način je jednostavniji
   </WrapPanel>
 </Button>
 \end{CodeBlock}
+
+\FigurePlaceholder{rezultat-3.png}{Rezultat 3: Dugme sa višebojnim sadržajem (isti vizuelni rezultat za obje prikazane varijante)}
 
 \section{Code-behind}
 
