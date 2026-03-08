@@ -28,10 +28,10 @@
                     Width="180"
                     Spacing="8"
                     Margin="12">
-            <Button Content="Početna" Height="36"/>
-            <Button Content="Paneli" Height="36"/>
-            <Button Content="Binding" Height="36"/>
-            <Button Content="Podešavanja" Height="36"/>
+            <Button Content="Početna" Height="36" Width="200"/>
+            <Button Content="Paneli" Height="36"  Width="200"/>
+            <Button Content="Binding" Height="36" Width="200"/>
+            <Button Content="Podešavanja" Height="36"  Width="200"/>
         </StackPanel>
 
         <!-- Main content -->

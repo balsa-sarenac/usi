@@ -1,0 +1,152 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="using:GetStartedApp"
+        x:Class="GetStartedApp.MainWindow"
+        x:DataType="local:BindingDemoViewModel"
+        Title="Avalonia Binding Demo"
+        Width="600"
+        Height="700">
+
+    <Window.Resources>
+
+        <x:String x:Key="strTestBinding">Hello from resource</x:String>
+        <SolidColorBrush x:Key="clrSpecialColor" Color="OrangeRed"/>
+        <local:MultiplyConverter x:Key="Mul2" Factor="2"/>
+
+    </Window.Resources>
+
+    <ScrollViewer>
+
+        <StackPanel Margin="12" Spacing="18">
+
+            <!-- STRING RESOURCE -->
+            <StackPanel Spacing="6">
+                <TextBlock Text="Binding na string resurs"
+                           FontWeight="Bold"/>
+                <TextBox Text="{StaticResource strTestBinding}"/>
+            </StackPanel>
+
+
+            <!-- COLOR RESOURCE -->
+            <StackPanel Spacing="6">
+                <TextBlock Text="Binding na brush resurs"
+                           FontWeight="Bold"/>
+                <TextBox Text="Selektuj deo teksta"
+                         SelectionBrush="{StaticResource clrSpecialColor}"/>
+            </StackPanel>
+
+
+            <!-- ONEWAY -->
+            <StackPanel Spacing="6">
+                <TextBlock Text="OneWay binding"
+                           FontWeight="Bold"/>
+
+                <TextBox Text="{Binding Test1, Mode=OneWay}"/>
+
+                <Button Content="Promeni Test1 u kodu"
+                        Click="SetTest1_Click"/>
+            </StackPanel>
+
+
+            <!-- TWOWAY -->
+            <StackPanel Spacing="6">
+                <TextBlock Text="TwoWay binding"
+                           FontWeight="Bold"/>
+
+                <TextBox Text="{Binding Test2}"/>
+
+                <TextBlock Text="{Binding Test2,
+                           StringFormat='Trenutno: {0}'}"/>
+            </StackPanel>
+
+
+            <!-- ONEWAY TO SOURCE -->
+            <StackPanel Spacing="6">
+                <TextBlock Text="OneWayToSource binding"
+                           FontWeight="Bold"/>
+
+                <TextBox Watermark="Kucaj ovde"
+                         Text="{Binding OnlySource,
+                         Mode=OneWayToSource}"/>
+
+                <TextBlock Text="{Binding OnlySource,
+                           StringFormat='Source: {0}'}"/>
+            </StackPanel>
+
+
+            <!-- CONTROL TO CONTROL -->
+            <StackPanel Spacing="6">
+                <TextBlock Text="Control-to-control binding"
+                           FontWeight="Bold"/>
+
+                <Slider x:Name="mySlider"
+                        Minimum="0"
+                        Maximum="100"
+                        Value="25"/>
+
+                <TextBlock Text="{Binding #mySlider.Value,
+                           StringFormat='Slider: {0:0}'}"/>
+            </StackPanel>
+
+
+            <!-- UPDATE SOURCE TRIGGER -->
+            <StackPanel Spacing="6">
+                <TextBlock Text="UpdateSourceTrigger primer"
+                           FontWeight="Bold"/>
+
+                <TextBox Watermark="PropertyChanged"
+                         Text="{Binding ImmediateText}"/>
+
+                <TextBlock Text="{Binding ImmediateText,
+                           StringFormat='Immediate: {0}'}"/>
+
+                <TextBox Watermark="LostFocus"
+                         Text="{Binding LostFocusText,
+                         UpdateSourceTrigger=LostFocus}"/>
+
+                <TextBlock Text="{Binding LostFocusText,
+                           StringFormat='LostFocus: {0}'}"/>
+            </StackPanel>
+
+
+            <!-- CONVERTER -->
+            <StackPanel Spacing="6">
+                <TextBlock Text="Converter primer"
+                           FontWeight="Bold"/>
+
+                <Slider x:Name="convSlider"
+                        Minimum="0"
+                        Maximum="50"
+                        Value="10"/>
+
+                <TextBlock Text="{Binding #convSlider.Value,
+                           StringFormat='Original: {0:0}'}"/>
+
+                <TextBlock Text="{Binding #convSlider.Value,
+                           Converter={StaticResource Mul2},
+                           StringFormat='x2: {0}'}"/>
+            </StackPanel>
+
+
+            <!-- LIST BINDING -->
+            <StackPanel Spacing="6">
+                <TextBlock Text="Binding na listu"
+                           FontWeight="Bold"/>
+
+                <ComboBox ItemsSource="{Binding Test3}"
+                          SelectedItem="{Binding SelectedTest3}"
+                          Width="200"/>
+
+                <TextBlock Text="{Binding SelectedTest3,
+                           StringFormat='Selektovano: {0}'}"/>
+
+                <Button Content="Dodaj element"
+                        Click="AddItem_Click"
+                        Width="200"/>
+            </StackPanel>
+
+        </StackPanel>
+
+    </ScrollViewer>
+
+</Window>

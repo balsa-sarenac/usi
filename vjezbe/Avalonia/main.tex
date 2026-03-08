@@ -839,7 +839,7 @@ public partial class MainWindow : Window
 \end{CodeBlock}
 
 \subsection{Binding na resurs – string (1)}
-Resursi se najčešće definišu u okviru \texttt{Window.Resources} bloka i koriste se preko \texttt{StaticResource}.
+Resursi se najčešće definišu u okviru \texttt{Window.Resources} bloka i koriste se preko \texttt{StaticResource}. Na ovaj način je moguće centralizovano definisati vrednosti koje se koriste na više mesta u interfejsu.
 
 \begin{CodeBlock}
 <!-- MainWindow.axaml (primer) -->
@@ -857,8 +857,12 @@ Resursi se najčešće definišu u okviru \texttt{Window.Resources} bloka i kori
 </Window>
 \end{CodeBlock}
 
+\FigurePlaceholder{rezultat-9.png}{Rezultat 9. Binding na string resurs definisan u \texttt{Window.Resources}}
+
+U ovom primeru vrednost iz resursa \texttt{strTestBinding} automatski se prikazuje u \texttt{TextBox} kontroli. Pošto je u pitanju statički resurs, kontrola koristi unapred definisanu vrednost iz bloka \texttt{Window.Resources}.
+
 \subsection{Binding na resurs – boja (2)}
-Primer resursa koji se koristi kao brush (npr. boja selekcije teksta).
+Pored tekstualnih vrednosti, u resursima se često definišu i boje, četkice (brush), stilovi i drugi objekti koji se koriste u interfejsu. U sledećem primeru resurs se koristi kao brush za boju selekcije teksta.
 
 \begin{CodeBlock}
 <!-- MainWindow.axaml (primer) -->
@@ -876,8 +880,12 @@ Primer resursa koji se koristi kao brush (npr. boja selekcije teksta).
 </Window>
 \end{CodeBlock}
 
+\FigurePlaceholder{rezultat-10.png}{Rezultat 10. Korišćenje brush resursa za svojstvo \texttt{SelectionBrush}}
+
+Na slici se vidi da se pri selekciji teksta koristi boja definisana kroz resurs \texttt{clrSpecialColor}. Ovakav pristup je koristan kada želimo dosledan izgled aplikacije i jednostavnije menjanje boja na jednom mestu.
+
 \subsection{One way – ka interfejsu (7)}
-OneWay binding – promene na source property automatski osvežavaju target property, ali izmene na kontroli ne menjaju source.
+\texttt{OneWay} binding znači da se promene na source svojstvu automatski prenose na target kontrolu, ali izmene na samoj kontroli ne menjaju source. Ovaj tip binding-a je koristan kada želimo da interfejs samo prikazuje podatke.
 
 \begin{CodeBlock}
 <!-- unutar Window.Content -->
@@ -899,8 +907,13 @@ private void SetTest1_Click(object? sender, RoutedEventArgs e)
 }
 \end{CodeBlock}
 
+\FigurePlaceholder{rezultat-11-1.png}{Rezultat 11.1. OneWay binding -- početno stanje}
+\FigurePlaceholder{rezultat-11-2.png}{Rezultat 11.2. OneWay binding -- stanje nakon klika na dugme \texttt{Promeni Test1 u kodu}}
+
+Na prvoj slici prikazano je početno stanje, gde \texttt{TextBox} prikazuje početnu vrednost svojstva \texttt{Test1}. Na drugoj slici vidi se rezultat nakon izmene svojstva \texttt{Test1} u code-behind-u. Pošto je binding tipa \texttt{OneWay}, promena na source strani automatski osvežava prikaz u interfejsu.
+
 \subsection{Two way – bidirekciono (6)}
-TwoWay binding – promene na source ili target property osvežavaju drugu stranu. \texttt{TextBox.Text} je u Avalonia podrazumevano \texttt{TwoWay}.
+\texttt{TwoWay} binding omogućava dvosmernu komunikaciju između source svojstva i kontrole. To znači da promena na source-u menja prikaz u interfejsu, ali i da korisnička izmena u kontroli menja source svojstvo. U Avalonia je \texttt{TextBox.Text} podrazumevano \texttt{TwoWay}.
 
 \begin{CodeBlock}
 <!-- unutar Window.Content -->
@@ -911,8 +924,13 @@ TwoWay binding – promene na source ili target property osvežavaju drugu stran
 </StackPanel>
 \end{CodeBlock}
 
+\FigurePlaceholder{rezultat-12-1.png}{Rezultat 12.1. TwoWay binding -- početno stanje}
+\FigurePlaceholder{rezultat-12-2.png}{Rezultat 12.2. TwoWay binding -- stanje nakon izmene vrednosti u \texttt{TextBox} kontroli}
+
+Na prvoj slici prikazano je početno stanje svojstva \texttt{Test2}. Na drugoj slici vidi se da nakon izmene teksta u \texttt{TextBox} kontroli dolazi do ažuriranja source svojstva, a zatim se nova vrednost prikazuje i u \texttt{TextBlock} kontroli. Time se jasno vidi dvosmerna priroda \texttt{TwoWay} binding-a.
+
 \subsection{One way to source – ka kodu (8)}
-OneWayToSource binding – promene na kontroli osvežavaju source, ali promene na source-u ne osvežavaju kontrolu.
+\texttt{OneWayToSource} binding predstavlja suprotan smer od \texttt{OneWay} binding-a. U ovom slučaju promene na kontroli ažuriraju source, ali promene na source-u ne ažuriraju kontrolu. Ovaj pristup je koristan kada korisnički unos želimo da prosledimo u model, ali ne očekujemo povratno osvežavanje iste kontrole.
 
 \begin{CodeBlock}
 <!-- unutar Window.Content -->
@@ -923,8 +941,13 @@ OneWayToSource binding – promene na kontroli osvežavaju source, ali promene n
 </StackPanel>
 \end{CodeBlock}
 
-\subsection{Binding kontrole na kontrolu (3)}
-Osim binding-a na \texttt{DataContext}, moguće je bindovati kontrolu direktno na kontrolu. U Avalonia možete koristiti \texttt{\#} sintaksu (named controls).
+\FigurePlaceholder{rezultat-13-1.png}{Rezultat 13.1. OneWayToSource binding -- početno stanje}
+\FigurePlaceholder{rezultat-13-2.png}{Rezultat 13.2. OneWayToSource binding -- stanje nakon unosa teksta u kontrolu}
+
+Na prvoj slici vidi se početno stanje. Na drugoj slici korisnik unosi tekst u \texttt{TextBox}, pri čemu se vrednost prenosi u source svojstvo \texttt{OnlySource} i prikazuje u \texttt{TextBlock} kontroli. Kod \texttt{OneWayToSource} binding-a promene se prenose sa kontrole ka source-u, ali ne i obrnuto.
+
+\subsection{Binding kontrole na kontrolu (14)}
+Osim binding-a na \texttt{DataContext}, moguće je povezati jednu kontrolu direktno sa drugom kontrolom. U Avalonia se za to često koristi \texttt{\#} sintaksa nad imenovanom kontrolom.
 
 \begin{CodeBlock}
 <!-- unutar Window.Content -->
@@ -935,8 +958,12 @@ Osim binding-a na \texttt{DataContext}, moguće je bindovati kontrolu direktno n
 </StackPanel>
 \end{CodeBlock}
 
+\FigurePlaceholder{rezultat-14.png}{Rezultat 14. Binding kontrole na kontrolu korišćenjem \texttt{\#} sintakse}
+
+U ovom primeru \texttt{TextBlock} ne čita vrednost iz \texttt{DataContext}-a, već direktno iz kontrole \texttt{Slider}. Kada se vrednost slider-a promeni, tekstualni prikaz se automatski ažurira.
+
 \subsection{Binding kontrole na kontrolu - real time (4)}
-\texttt{UpdateSourceTrigger} određuje kada će se promena sa kontrole preneti na source. U Avalonia, \texttt{TextBox.Text} se podrazumevano sinhronizuje na svako kucanje (\texttt{PropertyChanged}).
+\texttt{UpdateSourceTrigger} određuje kada će promena sa kontrole biti preneta na source. U Avalonia, \texttt{TextBox.Text} se podrazumevano sinhronizuje pri svakoj promeni vrednosti, odnosno ponaša se kao \texttt{PropertyChanged}. Međutim, moguće je zadati i drugačije ponašanje, kao što je ažuriranje tek nakon gubitka fokusa.
 
 \begin{CodeBlock}
 <!-- unutar Window.Content -->
@@ -951,8 +978,14 @@ Osim binding-a na \texttt{DataContext}, moguće je bindovati kontrolu direktno n
 </StackPanel>
 \end{CodeBlock}
 
+\FigurePlaceholder{rezultat-15-1.png}{Rezultat 15.1. \texttt{PropertyChanged} -- vrednost se ažurira odmah tokom kucanja}
+\FigurePlaceholder{rezultat-15-2.png}{Rezultat 15.2. \texttt{LostFocus} -- tekst je unet, ali source još nije ažuriran dok kontrola i dalje ima fokus}
+\FigurePlaceholder{rezultat-15-3.png}{Rezultat 15.3. \texttt{LostFocus} -- nakon gubitka fokusa source vrednost je ažurirana}
+
+Prva slika prikazuje ponašanje podrazumevanog \texttt{UpdateSourceTrigger=PropertyChanged}, gde se promena prenosi na source odmah tokom unosa. Druga slika prikazuje da kod \texttt{LostFocus} uneta vrednost još nije preneta dok je fokus i dalje na polju. Treća slika prikazuje stanje nakon gubitka fokusa, kada se source konačno ažurira.
+
 \subsection{Binding kontrole na kontrolu - real time + konverzija (5)}
-Ako se u procesu binding-a želi iskoristiti konverzija, koristite \texttt{Converter}. U Avalonia se kreira implementacijom \texttt{IValueConverter}.
+U nekim situacijama nije dovoljno samo preneti vrednost iz source-a u target, već je potrebno tu vrednost i transformisati. Za to se koristi \texttt{Converter}. U Avalonia se konverter najčešće implementira preko interfejsa \texttt{IValueConverter}.
 
 \begin{CodeBlock}
 // MultiplyConverter.cs
@@ -1001,8 +1034,12 @@ public class MultiplyConverter : IValueConverter
 </Window>
 \end{CodeBlock}
 
+\FigurePlaceholder{rezultat-16.png}{Rezultat 16. Primena konvertera nad vrednošću sa slider-a}
+
+Na slici se vidi originalna vrednost slider-a i rezultat nakon primene konvertera koji tu vrednost množi sa zadatim faktorom. Na taj način jedna ista izvorna vrednost može biti prikazana u različitim oblicima, u zavisnosti od potreba interfejsa.
+
 \subsection{Binding na listu (9)}
-Primer binding-a \texttt{ComboBox} kontrole na kolekciju (\texttt{ObservableCollection}).
+Binding nije ograničen samo na pojedinačne vrednosti. Veoma čest slučaj je povezivanje UI kontrole sa kolekcijom podataka. U sledećem primeru \texttt{ComboBox} je povezan sa kolekcijom \texttt{Test3} tipa \texttt{ObservableCollection}, dok se trenutno izabrana vrednost čuva u svojstvu \texttt{SelectedTest3}.
 
 \begin{CodeBlock}
 <!-- unutar Window.Content -->
@@ -1028,6 +1065,11 @@ private void AddItem_Click(object? sender, RoutedEventArgs e)
     ViewModel.AddItem();
 }
 \end{CodeBlock}
+
+\FigurePlaceholder{rezultat-17.png}{Rezultat 17. Binding \texttt{ComboBox} kontrole na kolekciju i prikaz selektovane vrednosti}
+
+Primer prikazuje povezivanje \texttt{ComboBox} kontrole sa kolekcijom \texttt{Test3}, kao i prikaz trenutno selektovanog elementa. Pošto je korišćena \texttt{ObservableCollection}, svaka promena kolekcije može automatski biti reflektovana u interfejsu. Dugme omogućava dinamičko dodavanje novih elemenata u listu.
+
 
 \section*{DODATAK}
 
