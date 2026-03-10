@@ -9,6 +9,7 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         
+        // Pronadjemo dugme, pa mu dodamo handler za događaj klika
         var button = this.FindControl<Button>("CodeBehindButton");
         if (button is not null)
         {

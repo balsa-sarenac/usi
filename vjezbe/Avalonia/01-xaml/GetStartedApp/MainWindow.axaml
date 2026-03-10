@@ -34,15 +34,17 @@
                            FontWeight="Bold"/>
 
                 <Button>
-                        <WrapPanel>
-                                <TextBlock Text="A" Foreground="Red"/>
-                                <TextBlock Text=" "/>
-                                <TextBlock Text="multi" Foreground="Green"/>
-                                <TextBlock Text=" "/>
-                                <TextBlock Text="color" Foreground="Blue"/>
-                                <TextBlock Text=" "/>
-                                <TextBlock Text="button" Foreground="DarkOrange"/>
-                        </WrapPanel>
+                        <Button.Content>
+                                <WrapPanel>
+                                        <TextBlock Text="A" Foreground="Red"/>
+                                        <TextBlock Text=" "/>
+                                        <TextBlock Text="multi" Foreground="Green"/>
+                                        <TextBlock Text=" "/>
+                                        <TextBlock Text="color" Foreground="Blue"/>
+                                        <TextBlock Text=" "/>
+                                        <TextBlock Text="button" Foreground="DarkOrange"/>
+                                </WrapPanel>
+                        </Button.Content>
                 </Button>
 
 
