@@ -1,0 +1,6 @@
+﻿Example 1 - Something is wrong with the negative number factorial calculation. Watch the Call Stack and the value of n.
+Example 2 - Compare how Pen and Point behave in the debugger. Pen is a class, Point is a struct.
+Example 3 - Something is wrong with populating the list with new elements. values.Count never increases. (Try using .Add())
+Example 4 - The object returned from LoadStudent(false) is only partially populated. Inspect student and student.Address before the crash.
+Example 5 - The code runs, but the result is wrong. Watch how integer division behaves before the value is stored in a double.
+Example 6 - The list is being changed while foreach is still using it. Try an exception breakpoint or a conditional breakpoint on numbers.Remove(number).
